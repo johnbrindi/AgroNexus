@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView, StatusBar, Text } from 'react-native';
+import { View, StyleSheet,StatusBar, Text } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors } from './src/styles/theme';
 
 // Screens
@@ -69,12 +70,14 @@ export default function App() {
   };
 
   return (
+    <SafeAreaProvider>
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={AppColors.background} />
       <View style={styles.content}>
         {renderScreen()}
       </View>
     </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
