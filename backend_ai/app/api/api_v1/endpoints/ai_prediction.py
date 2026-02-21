@@ -1,7 +1,13 @@
 from fastapi import APIRouter, Depends, File, UploadFile
+from sqlalchemy.orm import Session
 import os
 import shutil
+from app.schemas import ai as schemas
+from app.services.ai_service import ai_service
 from app.services.gemini_service import gemini_service
+from app.core import deps
+
+router = APIRouter()
 
 @router.post("/detect-disease")
 async def detect_disease(
