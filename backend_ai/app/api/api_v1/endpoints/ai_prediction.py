@@ -1,10 +1,30 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from app.schemas import ai as schemas
-from app.services.ai_service import ai_service
-from app.core import deps
+from fastapi import APIRouter, Depends, File, UploadFile
+import os
+import shutil
+from app.services.gemini_service import gemini_service
 
-router = APIRouter()
+@router.post("/detect-disease")
+async def detect_disease(
+    file: UploadFile = File(...),
+    current_user = Depends(deps.get_current_active_user)
+):
+    """
+    Upload an image of a crop to detect diseases using Gemini AI.
+    """
+    # Ensure temp directory exists
+    os.makedirs("temp_uploads", exist_ok=True)
+    file_path = f"temp_uploads/{file.filename}"
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    try:
+        diagnosis = await gemini_service.detect_crop_disease(file_path)
+        return {"diagnosis": diagnosis}
+    finally:
+        # Clean up
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 @router.post("/predict/yield", response_model=schemas.YieldPredictionResponse)
 def predict_yield(

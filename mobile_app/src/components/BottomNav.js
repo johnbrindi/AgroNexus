@@ -3,24 +3,24 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Home, Bluetooth, Leaf, ShoppingBag } from 'lucide-react-native';
 import { AppColors } from '../styles/theme';
 
-export default function BottomNav({ navigate, active }) {
+export default function BottomNav({ navigation, active }) {
     const navItems = [
-        { id: 'home', icon: Home, label: 'Home' },
-        { id: 'devices', icon: Bluetooth, label: 'Devices' },
-        { id: 'ai-doctor', icon: Leaf, label: 'AI Doctor' },
-        { id: 'marketplace', icon: ShoppingBag, label: 'Market' }
+        { id: 'Home', icon: Home, label: 'Home' },
+        { id: 'Devices', icon: Bluetooth, label: 'Devices' },
+        { id: 'AIDoctor', icon: Leaf, label: 'AI Doctor' },
+        { id: 'Marketplace', icon: ShoppingBag, label: 'Market' }
     ];
 
     return (
         <View style={styles.bottomNav}>
             {navItems.map(item => {
-                const isActive = active === item.id;
+                const isActive = active.toLowerCase() === item.id.toLowerCase();
                 const Icon = item.icon;
                 return (
                     <TouchableOpacity
                         key={item.id}
                         style={styles.navItem}
-                        onPress={() => navigate(item.id)}
+                        onPress={() => navigation.navigate(item.id)}
                     >
                         <Icon
                             size={24}

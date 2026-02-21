@@ -20,7 +20,7 @@ import {
   Chrome, // Using Chrome as a placeholder for Google logo in lucide
 } from "lucide-react-native";
 
-export default function SignInScreen({ navigate, onLogin }) {
+export default function SignInScreen({ navigation, onLogin }) {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +32,8 @@ export default function SignInScreen({ navigate, onLogin }) {
       name: "Jean Dupont",
       email: loginId,
     };
-    onLogin(user);
+    if (onLogin) onLogin(user);
+    navigation.navigate('Home');
   };
 
   const renderInput = (
@@ -154,7 +155,7 @@ export default function SignInScreen({ navigate, onLogin }) {
           {/* Footer Section */}
           <TouchableOpacity
             style={styles.footer}
-            onPress={() => navigate("signup")}
+            onPress={() => navigation.navigate("SignUp")}
           >
             <Text style={styles.footerText}>
               Don't have an account?{" "}

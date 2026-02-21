@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function PaymentScreen({ navigate }) {
+export default function PaymentScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Text>Payment Placeholder</Text>

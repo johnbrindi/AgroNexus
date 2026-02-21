@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AppColors } from '../../styles/theme';
 
-export default function ProductDetailScreen({ navigate }) {
+export default function ProductDetailScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Text>Product Detail Placeholder</Text>
-            <TouchableOpacity onPress={() => navigate('marketplace')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Marketplace')}>
                 <Text>Back to Market</Text>
             </TouchableOpacity>
         </View>

@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
-import { 
-    View, 
-    Text, 
-    StyleSheet, 
-    TextInput, 
-    TouchableOpacity, 
-    KeyboardAvoidingView, 
+import {
+    View,
+    Text,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    KeyboardAvoidingView,
     Platform,
     ScrollView
 } from 'react-native';
 import { AppColors } from '../../styles/theme';
-import { 
-    User, 
-    Phone, 
-    MapPin, 
+import {
+    User,
+    Phone,
+    MapPin,
     Mail,
-    Lock, 
-    Eye, 
+    Lock,
+    Eye,
     EyeOff,
     CheckSquare,
     Square
 } from 'lucide-react-native';
 
-export default function SignUpScreen({ navigate }) {
+export default function SignUpScreen({ navigation }) {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
@@ -61,11 +61,11 @@ export default function SignUpScreen({ navigate }) {
     );
 
     return (
-        <KeyboardAvoidingView 
-            style={{ flex: 1 }} 
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-            <ScrollView 
+            <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
             >
@@ -79,11 +79,11 @@ export default function SignUpScreen({ navigate }) {
                     {/* Form Card */}
                     <View style={styles.card}>
                         {renderInput('Full Name', name, setName, 'Enter your legal name', <User size={18} color={AppColors.textGrey} style={styles.icon} />)}
-                        
+
                         {renderInput('Phone Number', phone, setPhone, 'e.g., +237 ...', <Phone size={18} color={AppColors.textGrey} style={styles.icon} />)}
-                        
+
                         {renderInput('Location', location, setLocation, 'City, Region', <MapPin size={18} color={AppColors.textGrey} style={styles.icon} />)}
-                        
+
                         {renderInput('Email Address', email, setEmail, 'example@mail.com', <Mail size={18} color={AppColors.textGrey} style={styles.icon} />)}
 
                         {renderInput('Password', password, setPassword, 'Min. 8 chars', <Lock size={18} color={AppColors.textGrey} style={styles.icon} />, true, showPassword, setShowPassword)}
@@ -102,15 +102,15 @@ export default function SignUpScreen({ navigate }) {
                             </Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.button} onPress={() => navigate('signin')}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
                             <Text style={styles.buttonText}>Create Account</Text>
                         </TouchableOpacity>
                     </View>
 
                     {/* Footer Section */}
-                    <TouchableOpacity 
-                        style={styles.footer} 
-                        onPress={() => navigate('signin')}
+                    <TouchableOpacity
+                        style={styles.footer}
+                        onPress={() => navigation.navigate('SignIn')}
                     >
                         <Text style={styles.footerText}>
                             Already have an account? <Text style={styles.signInText}>Sign In</Text>

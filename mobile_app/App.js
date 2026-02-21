@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { View, StyleSheet,StatusBar, Text } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect } from 'react';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AppColors } from './src/styles/theme';
 
 // Screens
@@ -15,68 +17,59 @@ import ProductDetailScreen from './src/screens/Marketplace/ProductDetailScreen';
 import PaymentScreen from './src/screens/Marketplace/PaymentScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
 
+import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold } from '@expo-google-fonts/inter';
+import * as SplashScreen from 'expo-splash-screen';
+
+// Prevent splash screen from auto-hiding
+SplashScreen.preventAutoHideAsync();
+
+const Stack = createNativeStackNavigator();
+
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('landing');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userData, setUserData] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold,
+  });
 
-  const navigate = (screen, data = null) => {
-    setCurrentScreen(screen);
-    if (data) {
-      if (screen === 'product-detail' || screen === 'payment') {
-        setSelectedProduct(data);
-      }
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
     }
-  };
+  }, [fontsLoaded]);
 
-  const handleLogin = (user) => {
-    setIsAuthenticated(true);
-    setUserData(user);
-    navigate('home');
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setUserData(null);
-    navigate('landing');
-  };
-
-  const renderScreen = () => {
-    switch (currentScreen) {
-      case 'landing':
-        return <LandingScreen navigate={navigate} />;
-      case 'signin':
-        return <SignInScreen navigate={navigate} onLogin={handleLogin} />;
-      case 'signup':
-        return <SignUpScreen navigate={navigate} />;
-      case 'home':
-        return <HomeScreen navigate={navigate} userData={userData} />;
-      case 'devices':
-        return <DevicesScreen navigate={navigate} />;
-      case 'ai-doctor':
-        return <AIDoctorScreen navigate={navigate} />;
-      case 'marketplace':
-        return <MarketplaceScreen navigate={navigate} />;
-      case 'product-detail':
-        return <ProductDetailScreen navigate={navigate} product={selectedProduct} />;
-      case 'payment':
-        return <PaymentScreen navigate={navigate} product={selectedProduct} />;
-      case 'profile':
-        return <ProfileScreen navigate={navigate} userData={userData} onLogout={handleLogout} />;
-      default:
-        return <LandingScreen navigate={navigate} />;
-    }
-  };
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <SafeAreaProvider>
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={AppColors.background} />
-      <View style={styles.content}>
-        {renderScreen()}
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor={AppColors.background} />
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Landing"
+            screenOptions={{
+              headerShown: false,
+              animation: 'slide_from_right',
+              contentStyle: { backgroundColor: AppColors.background }
+            }}
+          >
+            <Stack.Screen name="Landing" component={LandingScreen} />
+            <Stack.Screen name="SignIn" component={SignInScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Devices" component={DevicesScreen} />
+            <Stack.Screen name="AIDoctor" component={AIDoctorScreen} />
+            <Stack.Screen name="Marketplace" component={MarketplaceScreen} />
+            <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
+            <Stack.Screen name="Payment" component={PaymentScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </View>
-    </SafeAreaView>
     </SafeAreaProvider>
   );
 }
@@ -85,8 +78,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: AppColors.background,
-  },
-  content: {
-    flex: 1,
   },
 });

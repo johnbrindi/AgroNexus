@@ -13,3 +13,6 @@ httpx
 pytest
 psycopg2-binary
 python-multipart
+google-generativeai
+pillow
+requests

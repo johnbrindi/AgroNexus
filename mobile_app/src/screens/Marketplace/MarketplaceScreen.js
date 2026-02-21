@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    View, 
-    Text, 
-    StyleSheet, 
-    TouchableOpacity, 
-    FlatList, 
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    FlatList,
     Image,
     Modal,
     Platform,
@@ -14,16 +14,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BottomNav from '../../components/BottomNav';
 import { AppColors } from '../../styles/theme';
-import { 
-    Plus, 
-    ChevronDown, 
-    MapPin, 
+import {
+    Plus,
+    ChevronDown,
+    MapPin,
     Package,
-    X, 
-    Calendar, 
-    Star, 
-    Minus, 
-    User 
+    X,
+    Calendar,
+    Star,
+    Minus,
+    User
 } from 'lucide-react-native';
 import { Button } from 'react-native';
 
@@ -84,7 +84,7 @@ const PRODUCTS = [
 ];
 
 // Product Detail Modal Component
-const ProductDetailModal = ({ product, visible, onClose, navigate }) => {
+const ProductDetailModal = ({ product, visible, onClose, navigation }) => {
     const [qty, setQty] = useState(1);
 
     useEffect(() => {
@@ -117,7 +117,7 @@ const ProductDetailModal = ({ product, visible, onClose, navigate }) => {
                     {/* Content */}
                     <View style={modalStyles.content}>
                         <View style={modalStyles.headerRow}>
-                            <View style={{flex: 1}}>
+                            <View style={{ flex: 1 }}>
                                 <Text style={modalStyles.name}>{product.name}</Text>
                                 <Text style={modalStyles.price}>{product.price} / unit</Text>
                             </View>
@@ -170,11 +170,11 @@ const ProductDetailModal = ({ product, visible, onClose, navigate }) => {
                         </View>
                         <Text style={modalStyles.totalText}>Total: {total.toLocaleString()} XAF</Text>
                     </View>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={modalStyles.payButton}
                         onPress={() => {
                             onClose();
-                            navigate('payment', { product, quantity: qty, totalCost: total });
+                            navigation.navigate('Payment', { product, quantity: qty, totalCost: total });
                         }}
                     >
                         <Text style={modalStyles.payButtonText}>Proceed to Payment</Text>
@@ -185,7 +185,7 @@ const ProductDetailModal = ({ product, visible, onClose, navigate }) => {
     );
 };
 
-export default function MarketplaceScreen({ navigate }) {
+export default function MarketplaceScreen({ navigation }) {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [activeTab, setActiveTab] = useState('sell');
 
@@ -199,13 +199,13 @@ export default function MarketplaceScreen({ navigate }) {
             </View>
 
             <View style={styles.tabs}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.tab, activeTab === 'sell' && styles.activeTab]}
                     onPress={() => setActiveTab('sell')}
                 >
                     <Text style={[styles.tabText, activeTab === 'sell' && styles.activeTabText]}>Sell Fresh</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.tab, activeTab === 'process' && styles.activeTab]}
                     onPress={() => setActiveTab('process')}
                 >
@@ -252,15 +252,15 @@ export default function MarketplaceScreen({ navigate }) {
                     )}
                 />
             </View>
-            
-            <ProductDetailModal 
-                product={selectedProduct} 
-                visible={!!selectedProduct} 
+
+            <ProductDetailModal
+                product={selectedProduct}
+                visible={!!selectedProduct}
                 onClose={() => setSelectedProduct(null)}
-                navigate={navigate}
+                navigation={navigation}
             />
-            
-            <BottomNav navigate={navigate} active="marketplace" />
+
+            <BottomNav navigation={navigation} active="marketplace" />
         </SafeAreaView>
     );
 }

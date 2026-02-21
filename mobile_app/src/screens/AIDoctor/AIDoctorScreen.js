@@ -3,13 +3,13 @@ import { View, Text, StyleSheet } from 'react-native';
 import BottomNav from '../../components/BottomNav';
 import { AppColors } from '../../styles/theme';
 
-export default function AIDoctorScreen({ navigate }) {
+export default function AIDoctorScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
                 <Text>AI Doctor Screen Placeholder</Text>
             </View>
-            <BottomNav navigate={navigate} active="ai-doctor" />
+            <BottomNav navigation={navigation} active="ai-doctor" />
         </View>
     );
 }

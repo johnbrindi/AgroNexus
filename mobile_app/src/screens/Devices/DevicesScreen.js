@@ -3,13 +3,13 @@ import { View, Text, StyleSheet } from 'react-native';
 import BottomNav from '../../components/BottomNav';
 import { AppColors } from '../../styles/theme';
 
-export default function DevicesScreen({ navigate }) {
+export default function DevicesScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
                 <Text>Devices Screen Placeholder</Text>
             </View>
-            <BottomNav navigate={navigate} active="devices" />
+            <BottomNav navigation={navigation} active="devices" />
         </View>
     );
 }

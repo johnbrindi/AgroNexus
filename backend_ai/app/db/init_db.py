@@ -9,6 +9,7 @@ from app.core.config import settings
 # knows about all the tables we want to create.
 from app.models.user import User
 from app.models.ai import AIPrediction
+from app.models.telemetry import Telemetry
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
