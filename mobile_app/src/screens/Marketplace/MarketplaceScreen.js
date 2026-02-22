@@ -1,40 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
-import { AppColors, AppSpacing, AppTypography } from '../../styles/theme';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, TextInput, useWindowDimensions } from 'react-native';
+import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
 import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../../components/shared/DashboardHeader';
 import { DashboardBottomNav } from '../../components/shared/DashboardBottomNav';
-import { SavedLocallyBar } from '../../components/shared/SavedLocallyBar';
 import { CardBase } from '../../components/ui/CardBase';
+import { StandardButton } from '../../components/ui/StandardButton';
 import { StatusChip } from '../../components/ui/StatusChip';
 
 export default function MarketplaceScreen({ navigation }) {
+    const { width } = useWindowDimensions();
+
     return (
         <SafeAreaView style={styles.container}>
-            <DashboardStatusBar />
+            <DashboardStatusBar isOnline={true} />
             <DashboardHeader
-                subtitle="COMMUNITY TRADE HUB"
-                title="Marketplace 🛒"
+                eyebrow="COMMUNITY TRADE"
+                title="Marketplace"
             />
 
-            {/* Price Ticker */}
+            {/* v3 Live Price Ticker */}
             <View style={styles.tickerContainer}>
+                <View style={styles.tickerHeader}>
+                    <Text style={styles.tickerLabel}>LIVE MARKET PRICES</Text>
+                    <View style={styles.livePulse} />
+                </View>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tickerContent}>
-                    <TickerItem emoji="🍅" name="TOMATO" price="520" trend="+4%" color="#EF5350" />
-                    <TickerItem emoji="🌽" name="MAIZE" price="280" trend="-2%" color="#4CAF50" />
-                    <TickerItem emoji="🥔" name="POTATO" price="450" trend="0%" color="#78909C" />
-                    <TickerItem emoji="🫘" name="BEANS" price="800" trend="+1%" color="#4CAF50" />
-                </ScrollView>
-            </View>
-
-            {/* Subheader: Category Picker */}
-            <View style={styles.subHeader}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryPadding}>
-                    <CategoryPill label="All Items" active />
-                    <CategoryPill label="Fresh Crops" />
-                    <CategoryPill label="Fertilizer" />
-                    <CategoryPill label="Equipment" />
-                    <CategoryPill label="Seeds" />
+                    <PriceCard emoji="🍅" name="Tomato" price="520" trend="+4%" />
+                    <PriceCard emoji="🌽" name="Maize" price="280" trend="-2%" trendDown />
+                    <PriceCard emoji="🥔" name="Potato" price="450" trend="0%" />
+                    <PriceCard emoji="🫘" name="Beans" price="800" trend="+1%" />
                 </ScrollView>
             </View>
 
@@ -44,59 +39,57 @@ export default function MarketplaceScreen({ navigation }) {
                 showsVerticalScrollIndicator={false}
             >
                 {/* Search Bar */}
-                <View style={styles.searchBar}>
-                    <Text style={styles.searchIcon}>🔍</Text>
-                    <TextInput placeholder="Search crops, sellers, or locations…" style={styles.searchInput} placeholderTextColor={AppColors.txtMuted} />
+                <View style={styles.searchWrapper}>
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Search crops or sellers..."
+                        placeholderTextColor={AppColors.txtMuted}
+                    />
                     <TouchableOpacity style={styles.filterBtn}>
-                        <Text style={styles.filterIcon}>🎚️</Text>
+                        <Text style={styles.filterIcon}>⚙️</Text>
                     </TouchableOpacity>
                 </View>
 
-                {/* Product Grid - Manual wrap for high fidelity control */}
-                <View style={styles.productGrid}>
-                    <ProductCard
-                        image="🍅"
-                        name="Grade A Plum Tomatoes"
-                        seller="Mama Fouda"
-                        location="Bamenda, NW"
-                        price="500"
-                        unit="Crate"
-                        rating="4.8"
-                        verified
-                    />
-                    <ProductCard
-                        image="🌽"
-                        name="Yellow Maize (Dried)"
-                        seller="Coop West"
-                        location="Bafoussam, West"
-                        price="12,000"
-                        unit="50kg Bag"
-                        rating="4.5"
-                        verified
-                    />
-                    <ProductCard
-                        image="🥔"
-                        name="Irish Potatoes"
-                        seller="Papa Santa"
-                        location="Santa, NW"
-                        price="4,500"
-                        unit="Bucket"
-                        rating="4.2"
-                        verified={false}
-                    />
-                    <ProductCard
-                        image="🫘"
-                        name="Red Kidney Beans"
-                        seller="Green Valley"
-                        location="Buea, SW"
-                        price="850"
-                        unit="kg"
-                        rating="4.9"
-                        verified
-                    />
-                </View>
+                {/* Categories */}
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.catScroll}>
+                    <TouchableOpacity style={[styles.catPill, styles.activeCat]}>
+                        <Text style={[styles.catText, styles.activeCatText]}>ALL ITEMS</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.catPill}>
+                        <Text style={styles.catText}>CROPS</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.catPill}>
+                        <Text style={styles.catText}>FERTILIZER</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.catPill}>
+                        <Text style={styles.catText}>TOOLS</Text>
+                    </TouchableOpacity>
+                </ScrollView>
 
-                <SavedLocallyBar message="Market prices cached for offline use" />
+                {/* Product List - Single Column v3 */}
+                <ProductCard
+                    title="Grade A Plum Tomatoes"
+                    price="500"
+                    unit="Crate"
+                    seller="Mama Fouda"
+                    location="Bamenda"
+                    isVerified
+                />
+                <ProductCard
+                    title="Yellow Maize (Dried)"
+                    price="12,000"
+                    unit="50kg Bag"
+                    seller="Coop West"
+                    location="Bafoussam"
+                    isVerified
+                />
+                <ProductCard
+                    title="Red Kidney Beans"
+                    price="850"
+                    unit="kg"
+                    seller="Green Valley"
+                    location="Buea"
+                />
             </ScrollView>
 
             <DashboardBottomNav activeTab="MARKET" navigation={navigation} />
@@ -104,52 +97,40 @@ export default function MarketplaceScreen({ navigation }) {
     );
 }
 
-const TickerItem = ({ emoji, name, price, trend, color }) => (
-    <View style={styles.tickerItem}>
-        <Text style={styles.tickerEmoji}>{emoji}</Text>
-        <Text style={styles.tickerName}>{name}</Text>
-        <Text style={styles.tickerPrice}>{price} <Text style={styles.tickerUnit}>XAF</Text></Text>
-        <Text style={[styles.tickerTrend, { color }]}>{trend}</Text>
+const PriceCard = ({ emoji, name, price, trend, trendDown }) => (
+    <View style={styles.priceCard}>
+        <Text style={styles.priceEmoji}>{emoji}</Text>
+        <View>
+            <Text style={styles.priceName}>{name}</Text>
+            <View style={styles.priceMeta}>
+                <Text style={styles.priceValue}>{price}</Text>
+                <Text style={[styles.priceTrend, trendDown && styles.trendDown]}>{trend}</Text>
+            </View>
+        </View>
     </View>
 );
 
-const CategoryPill = ({ label, active }) => (
-    <TouchableOpacity style={[styles.catPill, active && styles.catPillActive]}>
-        <Text style={[styles.catPillText, active && styles.catPillTextActive]}>{label}</Text>
-    </TouchableOpacity>
-);
-
-const ProductCard = ({ image, name, seller, location, price, unit, rating, verified }) => (
-    <CardBase style={styles.pCard} accentColor={verified ? "forest" : "clay"}>
-        <View style={styles.pImageOverlay}>
-            <Text style={styles.pEmoji}>{image}</Text>
-            {verified && (
-                <View style={styles.vBadge}>
-                    <Text style={styles.vIcon}>✔️</Text>
-                    <Text style={styles.vText}>VERIFIED</Text>
+const ProductCard = ({ title, price, unit, seller, location, isVerified }) => (
+    <CardBase style={styles.productCard}>
+        <View style={styles.productTop}>
+            <View style={styles.productImgPlaceholder}>
+                <Text style={styles.productImgEmoji}>📦</Text>
+            </View>
+            <View style={styles.productInfo}>
+                <View style={styles.productHeader}>
+                    <Text style={styles.productTitle}>{title}</Text>
+                    {isVerified && <StatusChip label="VERIFIED" variant="ok" />}
                 </View>
-            )}
+                <Text style={styles.productSeller}>{seller} · {location}</Text>
+            </View>
         </View>
-        <View style={styles.pContent}>
-            <Text style={styles.pName} numberOfLines={1}>{name}</Text>
-            <View style={styles.pSellerRow}>
-                <Text style={styles.pSeller}>{seller}</Text>
-                <View style={styles.pRating}>
-                    <Text style={styles.pStar}>⭐</Text>
-                    <Text style={styles.pRatingText}>{rating}</Text>
-                </View>
+        <View style={styles.productDivider} />
+        <View style={styles.productFooter}>
+            <View>
+                <Text style={styles.productPrice}>{price} XAF</Text>
+                <Text style={styles.productUnit}>per {unit}</Text>
             </View>
-            <Text style={styles.pLoc}>📍 {location}</Text>
-
-            <View style={styles.pPriceRow}>
-                <View>
-                    <Text style={styles.pPriceValue}>{price}</Text>
-                    <Text style={styles.pPriceUnit}>XAF / {unit}</Text>
-                </View>
-                <TouchableOpacity style={styles.pAddBtn}>
-                    <Text style={styles.pAddIcon}>+</Text>
-                </TouchableOpacity>
-            </View>
+            <StandardButton title="VIEW DEAL" variant="secondary" size="small" />
         </View>
     </CardBase>
 );
@@ -157,199 +138,199 @@ const ProductCard = ({ image, name, seller, location, price, unit, rating, verif
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: AppColors.offwhite,
+        backgroundColor: AppColors.page,
     },
     tickerContainer: {
-        backgroundColor: AppColors.forestDark,
-        paddingBottom: 10,
+        backgroundColor: AppColors.primary,
+        paddingVertical: 18,
+    },
+    tickerHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 22,
+        marginBottom: 12,
+        gap: 8,
+    },
+    tickerLabel: {
+        fontSize: 10,
+        fontWeight: '900',
+        color: '#FFF',
+        letterSpacing: 1,
+        fontFamily: AppTypography.fontPrimaryBlack,
+    },
+    livePulse: {
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: '#69F0AE',
     },
     tickerContent: {
-        paddingLeft: 16,
+        paddingHorizontal: 22,
         gap: 12,
     },
-    tickerItem: {
-        backgroundColor: 'rgba(245, 242, 238, 0.08)',
+    priceCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255,255,255,0.15)',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 12,
+        gap: 10,
         borderWidth: 1,
-        borderColor: 'rgba(245, 242, 238, 0.15)',
-        borderRadius: 8,
-        paddingHorizontal: 10,
-        paddingVertical: 6,
+        borderColor: 'rgba(255,255,255,0.1)',
+    },
+    priceEmoji: {
+        fontSize: 18,
+    },
+    priceName: {
+        fontSize: 10,
+        fontWeight: '700',
+        color: 'rgba(255,255,255,0.8)',
+        fontFamily: AppTypography.fontPrimaryBold,
+    },
+    priceMeta: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
     },
-    tickerEmoji: { fontSize: 13 },
-    tickerName: {
-        fontSize: 9,
-        fontWeight: '700',
-        color: AppColors.txtOnDark3,
-        fontFamily: AppTypography.fontPrimaryBold,
-    },
-    tickerPrice: {
-        fontSize: 12,
+    priceValue: {
+        fontSize: 14,
         fontWeight: '900',
-        color: AppColors.txtOnDark,
+        color: '#FFF',
         fontFamily: AppTypography.fontMonoBold,
     },
-    tickerUnit: { fontSize: 8, fontWeight: '400' },
-    tickerTrend: {
+    priceTrend: {
         fontSize: 10,
         fontWeight: '700',
+        color: '#69F0AE',
         fontFamily: AppTypography.fontMonoBold,
     },
-    subHeader: {
-        backgroundColor: AppColors.forestDark,
-        paddingBottom: 14,
-    },
-    categoryPadding: {
-        paddingLeft: 16,
-        gap: 8,
-    },
-    catPill: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 20,
-        backgroundColor: 'rgba(245, 242, 238, 0.12)',
-        borderWidth: 1,
-        borderColor: 'rgba(245, 242, 238, 0.2)',
-    },
-    catPillActive: {
-        backgroundColor: AppColors.gold,
-        borderColor: AppColors.gold,
-    },
-    catPillText: {
-        fontSize: 11,
-        fontWeight: '700',
-        color: 'rgba(245, 242, 238, 0.7)',
-        fontFamily: AppTypography.fontPrimaryBold,
-    },
-    catPillTextActive: {
-        color: AppColors.forestDark,
+    trendDown: {
+        color: '#FF8A80',
     },
     contentScroll: {
         flex: 1,
-        backgroundColor: '#EAEAE2',
     },
     scrollPadding: {
-        padding: 14,
-        gap: 14,
+        paddingHorizontal: 22,
+        paddingTop: 18,
         paddingBottom: 30,
+        gap: 18,
     },
-    searchBar: {
-        backgroundColor: AppColors.cream,
-        borderWidth: 1.5,
-        borderColor: AppColors.borderStrong,
-        borderRadius: AppSpacing.radiusSm,
+    searchWrapper: {
         flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 14,
-        height: 44,
+        gap: 12,
     },
-    searchIcon: { fontSize: 16 },
     searchInput: {
         flex: 1,
-        marginLeft: 10,
-        fontSize: 13,
+        height: 52,
+        backgroundColor: AppColors.inputBg,
+        borderRadius: 12,
+        paddingHorizontal: 18,
+        fontSize: 15,
+        color: AppColors.txtPrimary,
+        borderWidth: 1,
+        borderColor: AppColors.border,
         fontFamily: AppTypography.fontPrimary,
     },
     filterBtn: {
-        width: 32,
-        height: 32,
-        backgroundColor: AppColors.offwhiteWarm,
-        borderRadius: 8,
+        width: 52,
+        height: 52,
+        backgroundColor: AppColors.white,
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: AppColors.border,
+    },
+    filterIcon: {
+        fontSize: 20,
+    },
+    catScroll: {
+        gap: 10,
+    },
+    catPill: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 20,
+        backgroundColor: AppColors.inputBg,
+        borderWidth: 1,
+        borderColor: AppColors.border,
+    },
+    activeCat: {
+        backgroundColor: '#000',
+        borderColor: '#000',
+    },
+    catText: {
+        fontSize: 11,
+        fontWeight: '800',
+        color: AppColors.txtSecondary,
+        fontFamily: AppTypography.fontPrimaryExtraBold,
+    },
+    activeCatText: {
+        color: '#FFF',
+    },
+    productCard: {
+        padding: 18,
+        borderRadius: AppSpacing.radiusLg,
+    },
+    productTop: {
+        flexDirection: 'row',
+        gap: 15,
+    },
+    productImgPlaceholder: {
+        width: 80,
+        height: 80,
+        borderRadius: 12,
+        backgroundColor: AppColors.inputBg,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    filterIcon: { fontSize: 14 },
-    productGrid: {
+    productImgEmoji: {
+        fontSize: 32,
+    },
+    productInfo: {
+        flex: 1,
+    },
+    productHeader: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 12,
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
     },
-    pCard: {
-        width: '48%', // Adjusted for gap
-    },
-    pImageOverlay: {
-        height: 100,
-        backgroundColor: AppColors.offwhiteWarm,
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-    },
-    pEmoji: { fontSize: 50 },
-    vBadge: {
-        position: 'absolute',
-        top: 6,
-        right: 6,
-        backgroundColor: 'rgba(45, 90, 39, 0.9)',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 3,
-        paddingHorizontal: 6,
-        paddingVertical: 3,
-        borderRadius: 4,
-    },
-    vIcon: { fontSize: 8, color: '#FFF' },
-    vText: { fontSize: 7, fontWeight: '900', color: '#FFF', letterSpacing: 0.5 },
-    pContent: {
-        padding: 10,
-    },
-    pName: {
-        fontSize: 13,
+    productTitle: {
+        fontSize: 17,
         fontWeight: '900',
         color: AppColors.txtPrimary,
         fontFamily: AppTypography.fontPrimaryBlack,
+        flex: 1,
+        marginRight: 8,
     },
-    pSellerRow: {
+    productSeller: {
+        fontSize: 13,
+        color: AppColors.txtMuted,
+        marginTop: 4,
+        fontFamily: AppTypography.fontPrimary,
+    },
+    productDivider: {
+        height: 1,
+        backgroundColor: AppColors.border,
+        marginVertical: 18,
+    },
+    productFooter: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 3,
     },
-    pSeller: {
-        fontSize: 10,
-        color: AppColors.txtMuted,
-        fontFamily: AppTypography.fontPrimary,
-    },
-    pRating: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 2,
-    },
-    pStar: { fontSize: 9 },
-    pRatingText: { fontSize: 9, fontWeight: '700', color: AppColors.clay },
-    pLoc: {
-        fontSize: 9,
-        color: AppColors.txtMuted,
-        marginTop: 2,
-        fontFamily: AppTypography.fontPrimary,
-    },
-    pPriceRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        marginTop: 10,
-    },
-    pPriceValue: {
-        fontSize: 15,
+    productPrice: {
+        fontSize: 18,
         fontWeight: '900',
-        color: AppColors.forest,
+        color: AppColors.txtPrimary,
         fontFamily: AppTypography.fontMonoBold,
     },
-    pPriceUnit: {
-        fontSize: 8,
+    productUnit: {
+        fontSize: 11,
         color: AppColors.txtMuted,
-        fontWeight: '500',
-        fontFamily: AppTypography.fontPrimaryMedium,
+        fontFamily: AppTypography.fontPrimary,
+        marginTop: 2,
     },
-    pAddBtn: {
-        width: 28,
-        height: 28,
-        backgroundColor: AppColors.forest,
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    pAddIcon: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
 });

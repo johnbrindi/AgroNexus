@@ -1,73 +1,82 @@
 export const AppColors = {
-  // Brand Greens
-  forest: '#2D5A27',
-  forestLight: '#3A7A33',
-  forestDark: '#1A3817',
-  forestDeep: '#0F2410',
+  // Surfaces & Backgrounds
+  page: '#F2F0EA',
+  surface: '#F9F8F3',
+  card: '#FFFFFF',
+  cardSecondary: '#F5F3EE',
+  input: '#EDEBE5',
 
-  // Earthy Accents
-  clay: '#795548',
-  clayLight: '#9C6B4E',
-  clayDark: '#4E342E',
-  slate: '#546E7A',
-  slateLight: '#78909C',
+  // Brand Green (7:1 contrast on white)
+  primary: '#2D5A27',
+  primaryLight: '#3D7035',
+  primaryDeep: '#1A3D16',
+  primarySubtle: '#B8D9B2',
+  primaryWash: '#EEF7EC',
 
-  // Surfaces
-  offwhite: '#F5F2EE',
-  offwhiteWarm: '#EDE8E1',
-  cream: '#FDFBF8',
+  // Status Colors (Saturated & Unambiguous)
+  success: '#16A34A',
+  successBg: '#F0FDF4',
+  successBorder: '#BBF7D0',
 
-  // Alert Colours
-  amber: '#D84315',
-  gold: '#F9A825',
-  goldLight: '#FFD54F',
-  success: '#2E7D32',
-  danger: '#C62828',
-  dangerLight: '#EF5350',
+  warning: '#D97706',
+  warningBg: '#FFFBEB',
+  warningBorder: '#FDE68A',
 
-  // Text
-  txtOnDark: '#F5F2EE',
-  txtOnDark2: 'rgba(245,242,238,0.78)',
-  txtOnDark3: 'rgba(245,242,238,0.50)',
-  txtPrimary: '#1A1208',
-  txtSecondary: '#3D3028',
-  txtMuted: '#6B5D52',
+  danger: '#DC2626',
+  dangerBg: '#FEF2F2',
+  dangerBorder: '#FECACA',
 
-  // Borders & Shadows
-  border: 'rgba(121,85,72,0.18)',
-  borderStrong: 'rgba(121,85,72,0.35)',
+  // Text Hierarchy
+  txtPrimary: '#111827',   // 17:1 on white
+  txtSecondary: '#374151', // 10:1 on white
+  txtMuted: '#6B7280',     // 5.7:1 on white (use only for labels)
+  txtOnPrimary: '#F9F8F3',
+
+  // Borders & Dividers
+  border: '#E5E3DC',
+  borderStrong: '#D4D1C8',
 };
 
 export const AppSpacing = {
-  radius: 16,
-  radiusSm: 10,
-  radiusXs: 6,
-  gap: 14,
+  radiusLg: 24,
+  radiusMd: 16,
+  radiusSm: 12,
+  radiusXs: 8,
 };
 
 export const AppTypography = {
-  fontPrimary: 'Roboto_400Regular',
-  fontPrimaryMedium: 'Roboto_500Medium',
-  fontPrimaryBold: 'Roboto_700Bold',
-  fontPrimaryBlack: 'Roboto_900Black',
-  fontMono: 'RobotoMono_400Regular',
+  fontPrimary: 'Manrope_400Regular',
+  fontPrimaryMedium: 'Manrope_500Medium',
+  fontPrimarySemiBold: 'Manrope_600SemiBold',
+  fontPrimaryBold: 'Manrope_700Bold',
+  fontPrimaryExtraBold: 'Manrope_800ExtraBold',
+  fontPrimaryBlack: 'Manrope_900Black',
+
+  fontMonoRegular: 'RobotoMono_400Regular',
   fontMonoMedium: 'RobotoMono_500Medium',
   fontMonoBold: 'RobotoMono_700Bold',
 };
 
 export const CommonStyles = {
+  shadowXs: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
   shadowSm: {
-    shadowColor: '#0F240A',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.07,
+    shadowRadius: 4,
     elevation: 2,
   },
   shadowMd: {
-    shadowColor: '#0F240A',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.14,
-    shadowRadius: 20,
-    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.09,
+    shadowRadius: 16,
+    elevation: 4,
   },
 };

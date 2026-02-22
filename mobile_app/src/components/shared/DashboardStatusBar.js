@@ -2,15 +2,22 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { AppColors, AppTypography } from '../../styles/theme';
 
-export const DashboardStatusBar = ({ isOnline = false }) => {
+export const DashboardStatusBar = ({ isOnline = false, time = "09:41" }) => {
     return (
         <View style={styles.statusBar}>
-            <Text style={styles.time}>09:41</Text>
+            <Text style={styles.time}>{time}</Text>
             <View style={styles.rightContainer}>
-                <View style={styles.savedPill}>
-                    <View style={styles.goldDot} />
-                    <Text style={styles.savedText}>SAVED</Text>
-                </View>
+                {isOnline ? (
+                    <View style={[styles.statusChip, styles.chipOnline]}>
+                        <View style={[styles.dot, styles.dotOk]} />
+                        <Text style={[styles.chipText, styles.txtOk]}>LIVE DATA</Text>
+                    </View>
+                ) : (
+                    <View style={[styles.statusChip, styles.chipOffline]}>
+                        <View style={[styles.dot, styles.dotWarn]} />
+                        <Text style={[styles.chipText, styles.txtWarn]}>OFFLINE</Text>
+                    </View>
+                )}
             </View>
         </View>
     );
@@ -18,47 +25,55 @@ export const DashboardStatusBar = ({ isOnline = false }) => {
 
 const styles = StyleSheet.create({
     statusBar: {
-        backgroundColor: AppColors.forestDeep,
-        paddingHorizontal: 22,
-        paddingTop: 12,
-        paddingBottom: 8,
+        backgroundColor: AppColors.surface,
+        paddingHorizontal: 26,
+        paddingTop: 14,
+        paddingBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     time: {
-        fontSize: 15,
-        fontWeight: '700',
-        color: AppColors.txtOnDark,
-        letterSpacing: 0.3,
-        fontFamily: AppTypography.fontPrimaryBold,
+        fontFamily: AppTypography.fontMonoSemiBold || AppTypography.fontMonoBold,
+        fontSize: 16,
+        fontWeight: '600',
+        color: AppColors.txtPrimary,
+        letterSpacing: -0.2,
     },
     rightContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    savedPill: {
-        backgroundColor: 'rgba(249, 168, 37, 0.18)',
-        borderWidth: 1,
-        borderColor: 'rgba(249, 168, 37, 0.4)',
-        paddingHorizontal: 7,
-        paddingVertical: 2,
-        borderRadius: 20,
+    statusChip: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 4,
+        gap: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 20,
+        borderWidth: 1,
     },
-    goldDot: {
-        width: 6,
-        height: 6,
-        borderRadius: 3,
-        backgroundColor: AppColors.gold,
+    chipOffline: {
+        backgroundColor: AppColors.warningBg,
+        borderColor: AppColors.warningBorder,
     },
-    savedText: {
-        fontSize: 9,
-        fontWeight: '700',
-        color: AppColors.gold,
-        letterSpacing: 0.5,
-        fontFamily: AppTypography.fontPrimaryBold,
+    chipOnline: {
+        backgroundColor: AppColors.successBg,
+        borderColor: AppColors.successBorder,
     },
+    dot: {
+        width: 7,
+        height: 7,
+        borderRadius: 4,
+    },
+    dotWarn: { backgroundColor: AppColors.warning },
+    dotOk: { backgroundColor: AppColors.success },
+    chipText: {
+        fontSize: 11,
+        fontWeight: '800',
+        letterSpacing: 0.3,
+        fontFamily: AppTypography.fontPrimaryExtraBold || AppTypography.fontPrimaryBold,
+    },
+    txtWarn: { color: AppColors.warning },
+    txtOk: { color: AppColors.success },
 });

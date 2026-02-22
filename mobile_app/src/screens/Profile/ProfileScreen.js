@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Switch } from 'react-native';
-import { AppColors, AppSpacing, AppTypography } from '../../styles/theme';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
+import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
 import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../../components/shared/DashboardHeader';
 import { DashboardBottomNav } from '../../components/shared/DashboardBottomNav';
-import { SavedLocallyBar } from '../../components/shared/SavedLocallyBar';
 import { CardBase } from '../../components/ui/CardBase';
 import { StandardButton } from '../../components/ui/StandardButton';
 
-export default function ProfileScreen({ navigation, onLogout }) {
+export default function ProfileScreen({ navigation }) {
+    const { width } = useWindowDimensions();
     const [offlineMode, setOfflineMode] = useState(true);
 
     return (
         <SafeAreaView style={styles.container}>
-            <DashboardStatusBar />
+            <DashboardStatusBar isOnline={true} />
             <DashboardHeader
-                subtitle="MEMBER SINCE JUNE 2024"
-                title="My Profile 👤"
+                eyebrow="MEMBER PROFILE"
+                title="Amina Njoya"
             />
 
             <ScrollView
@@ -24,87 +24,74 @@ export default function ProfileScreen({ navigation, onLogout }) {
                 contentContainerStyle={styles.scrollPadding}
                 showsVerticalScrollIndicator={false}
             >
-                {/* User Stats Card */}
-                <CardBase accentColor="forest">
-                    <View style={styles.statsCard}>
-                        <View style={styles.statsHeader}>
-                            <View style={styles.avatarLarge}>
-                                <Text style={styles.avatarLargeText}>AN</Text>
-                            </View>
-                            <View style={styles.userMeta}>
-                                <Text style={styles.userName}>Amina Njoya</Text>
-                                <Text style={styles.userRole}>Master Farmer · Bafoussam</Text>
-                                <View style={styles.levelRow}>
-                                    <Text style={styles.levelText}>Level 12</Text>
-                                    <View style={styles.levelBar}>
-                                        <View style={[styles.levelProgress, { width: '65%' }]} />
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-
-                        {/* Impact Grid */}
-                        <View style={styles.impactGrid}>
-                            <ImpactItem label="Hectares" value="2.4" sub="Managed" icon="🚜" />
-                            <ImpactItem label="Water Saved" value="12k" sub="Litres" icon="💧" />
-                            <ImpactItem label="Yield" value="+22%" sub="vs Region" icon="📈" />
+                {/* User Info / Avatar */}
+                <View style={styles.userSection}>
+                    <View style={styles.avatarBox}>
+                        <Text style={styles.avatarText}>AN</Text>
+                    </View>
+                    <View style={styles.userInfo}>
+                        <Text style={styles.userName}>Amina Njoya</Text>
+                        <Text style={styles.userLoc}>Bafoussam, Cameroon</Text>
+                        <View style={styles.badgeRow}>
+                            <Text style={styles.badge}>MASTER FARMER</Text>
                         </View>
                     </View>
-                </CardBase>
+                </View>
 
-                {/* Achievements Section */}
-                <View style={styles.sectionHeader}>
+                {/* Impact Tiles 2x2 Grid */}
+                <View style={styles.impactGrid}>
+                    <ImpactTile label="HECTARES" value="2.4" unit="ha" />
+                    <ImpactTile label="WATER SAVED" value="12k" unit="litres" />
+                    <ImpactTile label="YIELD STREAK" value="7" unit="weeks" />
+                    <ImpactTile label="HEALTH SCORE" value="87" unit="/100" />
+                </View>
+
+                {/* Achievements */}
+                <View style={styles.section}>
                     <Text style={styles.sectionTitle}>ACHIEVEMENTS</Text>
-                    <TouchableOpacity><Text style={styles.viewAll}>View All →</Text></TouchableOpacity>
-                </View>
-
-                <View style={styles.achievementGrid}>
-                    <AchievementCard emoji="🎯" title="Irrigation Pro" date="Feb 12" gold />
-                    <AchievementCard emoji="🔎" title="Blight Spotter" date="Feb 19" />
-                    <AchievementCard emoji="🤝" title="Top Seller" date="Jan 28" />
-                    <AchievementCard emoji="⚡" title="Early Adopter" date="Jun 24" />
-                </View>
-
-                {/* Settings & Tools */}
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>SETTINGS & TOOLS</Text>
-                </View>
-
-                <CardBase accentColor="slate">
-                    <View style={styles.settingsBox}>
-                        <SettingRow
-                            icon="📶"
-                            title="Offline First Mode"
-                            desc="Save all scans and data locally first"
-                            right={<Switch value={offlineMode} onValueChange={setOfflineMode} trackColor={{ true: AppColors.forest }} />}
-                        />
-                        <View style={styles.divider} />
-                        <SettingRow
-                            icon="☁️"
-                            title="Cloud Sync"
-                            desc="Last sync: 12 minutes ago"
-                            right={<TouchableOpacity><Text style={styles.syncBtn}>SYNC NOW</Text></TouchableOpacity>}
-                        />
-                        <View style={styles.divider} />
-                        <SettingRow
-                            icon="🌐"
-                            title="Language"
-                            desc="English (UK) — Swahili available"
-                            right={<Text style={styles.valText}>Change</Text>}
-                        />
+                    <View style={styles.achievementGrid}>
+                        <AchievementItem emoji="🌾" />
+                        <AchievementItem emoji="💧" />
+                        <AchievementItem emoji="🏆" />
+                        <AchievementItem emoji="🌱" />
                     </View>
-                </CardBase>
+                </View>
 
-                {/* Danger Zone */}
+                {/* Account Settings */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>SYSTEM SETTINGS</Text>
+                    <CardBase style={styles.settingsCard}>
+                        <View style={styles.settingRow}>
+                            <View style={styles.settingInfo}>
+                                <Text style={styles.settingLabel}>OFFLINE FIRST</Text>
+                                <Text style={styles.settingDesc}>Prioritize local data storage</Text>
+                            </View>
+                            <Switch
+                                value={offlineMode}
+                                onValueChange={setOfflineMode}
+                                trackColor={{ true: AppColors.primary, false: AppColors.border }}
+                                thumbColor={offlineMode ? '#FFF' : '#FFF'}
+                            />
+                        </View>
+                        <View style={styles.rowDivider} />
+                        <View style={styles.settingRow}>
+                            <View style={styles.settingInfo}>
+                                <Text style={styles.settingLabel}>LANGUAGE</Text>
+                                <Text style={styles.settingDesc}>English (UK)</Text>
+                            </View>
+                            <TouchableOpacity>
+                                <Text style={styles.changeAction}>CHANGE</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </CardBase>
+                </View>
+
                 <StandardButton
-                    title="🚪 LOG OUT"
+                    title="LOG OUT"
                     variant="danger"
-                    size="large"
                     onPress={() => navigation.navigate('Landing')}
                     style={styles.logoutBtn}
                 />
-
-                <SavedLocallyBar message="Settings saved on this device" />
             </ScrollView>
 
             <DashboardBottomNav activeTab="PROFILE" navigation={navigation} />
@@ -112,241 +99,184 @@ export default function ProfileScreen({ navigation, onLogout }) {
     );
 }
 
-const ImpactItem = ({ label, value, sub, icon }) => (
-    <View style={styles.impactItem}>
-        <Text style={styles.impactIcon}>{icon}</Text>
-        <Text style={styles.impactValue}>{value}</Text>
+const ImpactTile = ({ label, value, unit }) => (
+    <CardBase style={styles.impactTile}>
         <Text style={styles.impactLabel}>{label}</Text>
-        <Text style={styles.impactSub}>{sub}</Text>
-    </View>
-);
-
-const AchievementCard = ({ emoji, title, date, gold }) => (
-    <View style={[styles.aCard, gold && styles.aCardGold]}>
-        <Text style={styles.aEmoji}>{emoji}</Text>
-        <Text style={styles.aTitle}>{title}</Text>
-        <Text style={styles.aDate}>{date}</Text>
-    </View>
-);
-
-const SettingRow = ({ icon, title, desc, right }) => (
-    <View style={styles.settingRow}>
-        <Text style={styles.settingIcon}>{icon}</Text>
-        <View style={styles.settingText}>
-            <Text style={styles.settingTitle}>{title}</Text>
-            <Text style={styles.settingDesc}>{desc}</Text>
+        <View style={styles.impactValueRow}>
+            <Text style={styles.impactValue}>{value}</Text>
+            <Text style={styles.impactUnit}>{unit}</Text>
         </View>
-        {right}
+    </CardBase>
+);
+
+const AchievementItem = ({ emoji }) => (
+    <View style={styles.achievementBox}>
+        <Text style={styles.achievementEmoji}>{emoji}</Text>
     </View>
 );
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: AppColors.offwhite,
+        backgroundColor: AppColors.page,
     },
     contentScroll: {
         flex: 1,
-        backgroundColor: '#EAEAE2',
     },
     scrollPadding: {
-        padding: 14,
-        gap: 14,
+        paddingHorizontal: 22,
+        paddingTop: 18,
         paddingBottom: 30,
+        gap: 25,
     },
-    statsCard: {
-        padding: 18,
-    },
-    statsHeader: {
+    userSection: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 16,
-        marginBottom: 20,
+        gap: 20,
     },
-    avatarLarge: {
-        width: 64,
-        height: 64,
-        borderRadius: 32,
-        backgroundColor: '#795548',
-        borderWidth: 3,
-        borderColor: 'rgba(255,255,255,0.2)',
+    avatarBox: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: AppColors.surface,
+        borderWidth: 1,
+        borderColor: AppColors.border,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    avatarLargeText: {
-        fontSize: 24,
+    avatarText: {
+        fontSize: 28,
         fontWeight: '900',
-        color: '#FFF',
+        color: AppColors.txtPrimary,
         fontFamily: AppTypography.fontPrimaryBlack,
     },
-    userMeta: {
+    userInfo: {
         flex: 1,
     },
     userName: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: '900',
         color: AppColors.txtPrimary,
         fontFamily: AppTypography.fontPrimaryBlack,
     },
-    userRole: {
-        fontSize: 12,
-        color: AppColors.txtMuted,
+    userLoc: {
+        fontSize: 14,
+        color: AppColors.txtSecondary,
         marginTop: 2,
         fontFamily: AppTypography.fontPrimary,
     },
-    levelRow: {
+    badgeRow: {
+        marginTop: 10,
         flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        marginTop: 8,
     },
-    levelText: {
-        fontSize: 11,
-        fontWeight: '700',
-        color: AppColors.forest,
-        fontFamily: AppTypography.fontPrimaryBold,
-    },
-    levelBar: {
-        flex: 1,
-        height: 6,
-        backgroundColor: 'rgba(0,0,0,0.05)',
-        borderRadius: 3,
-        overflow: 'hidden',
-    },
-    levelProgress: {
-        height: '100%',
-        backgroundColor: AppColors.forest,
-        borderRadius: 3,
+    badge: {
+        fontSize: 10,
+        fontWeight: '900',
+        backgroundColor: AppColors.primaryWash,
+        color: AppColors.primary,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 4,
+        fontFamily: AppTypography.fontPrimaryBlack,
     },
     impactGrid: {
         flexDirection: 'row',
-        backgroundColor: AppColors.offwhiteWarm,
-        borderRadius: AppSpacing.radiusSm,
-        paddingVertical: 14,
-        borderWidth: 1,
-        borderColor: AppColors.border,
+        flexWrap: 'wrap',
+        gap: 16,
     },
-    impactItem: {
-        flex: 1,
-        alignItems: 'center',
-        borderRightWidth: 1,
-        borderRightColor: AppColors.border,
-    },
-    impactIcon: { fontSize: 18, marginBottom: 4 },
-    impactValue: {
-        fontSize: 18,
-        fontWeight: '900',
-        color: AppColors.forest,
-        fontFamily: AppTypography.fontMonoBold,
+    impactTile: {
+        width: '47.5%', // 2 columns approx
+        padding: 18,
+        borderRadius: AppSpacing.radiusMd,
     },
     impactLabel: {
         fontSize: 9,
-        fontWeight: '700',
+        fontWeight: '800',
         color: AppColors.txtMuted,
-        textTransform: 'uppercase',
         letterSpacing: 0.5,
-        marginTop: 2,
-        fontFamily: AppTypography.fontPrimaryBold,
+        fontFamily: AppTypography.fontPrimaryExtraBold,
+        marginBottom: 8,
     },
-    impactSub: {
-        fontSize: 9,
+    impactValueRow: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        gap: 4,
+    },
+    impactValue: {
+        fontSize: 24,
+        fontWeight: '900',
+        color: AppColors.txtPrimary,
+        fontFamily: AppTypography.fontMonoBold,
+    },
+    impactUnit: {
+        fontSize: 11,
         color: AppColors.txtMuted,
         fontFamily: AppTypography.fontPrimary,
     },
-    sectionHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 6,
+    section: {
+        gap: 12,
     },
     sectionTitle: {
         fontSize: 11,
-        fontWeight: '700',
+        fontWeight: '800',
         color: AppColors.txtMuted,
         letterSpacing: 1,
-        fontFamily: AppTypography.fontPrimaryBold,
-    },
-    viewAll: {
-        fontSize: 11,
-        color: AppColors.forest,
-        fontWeight: '700',
+        fontFamily: AppTypography.fontPrimaryExtraBold,
     },
     achievementGrid: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 10,
+        gap: 12,
     },
-    aCard: {
-        width: '23%', // 4 items per row
-        backgroundColor: AppColors.cream,
-        borderRadius: 12,
-        padding: 8,
-        alignItems: 'center',
+    achievementBox: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: AppColors.surface,
         borderWidth: 1,
         borderColor: AppColors.border,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    aCardGold: {
-        borderColor: AppColors.gold,
-        backgroundColor: '#FFFDE7',
+    achievementEmoji: {
+        fontSize: 28,
     },
-    aEmoji: { fontSize: 24, marginBottom: 4 },
-    aTitle: {
-        fontSize: 8,
-        fontWeight: '700',
+    settingsCard: {
+        borderRadius: AppSpacing.radiusMd,
+        overflow: 'hidden',
+    },
+    settingRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 18,
+    },
+    settingInfo: {
+        flex: 1,
+    },
+    settingLabel: {
+        fontSize: 13,
+        fontWeight: '900',
         color: AppColors.txtPrimary,
-        textAlign: 'center',
-        fontFamily: AppTypography.fontPrimaryBold,
+        fontFamily: AppTypography.fontPrimaryBlack,
     },
-    aDate: {
-        fontSize: 7,
+    settingDesc: {
+        fontSize: 11,
         color: AppColors.txtMuted,
         marginTop: 2,
         fontFamily: AppTypography.fontPrimary,
     },
-    settingsBox: {
-        padding: 4,
-    },
-    settingRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 12,
-        gap: 12,
-    },
-    settingIcon: { fontSize: 20 },
-    settingText: {
-        flex: 1,
-    },
-    settingTitle: {
-        fontSize: 13,
-        fontWeight: '700',
-        color: AppColors.txtPrimary,
-        fontFamily: AppTypography.fontPrimaryBold,
-    },
-    settingDesc: {
-        fontSize: 10,
-        color: AppColors.txtMuted,
-        marginTop: 1,
-        fontFamily: AppTypography.fontPrimary,
-    },
-    divider: {
+    rowDivider: {
         height: 1,
-        backgroundColor: 'rgba(121, 85, 72, 0.08)',
-        marginHorizontal: 12,
+        backgroundColor: AppColors.border,
+        marginHorizontal: 18,
     },
-    syncBtn: {
-        fontSize: 10,
-        fontWeight: '900',
-        color: AppColors.forest,
-        fontFamily: AppTypography.fontPrimaryBlack,
-    },
-    valText: {
-        fontSize: 11,
-        color: AppColors.txtMuted,
-        fontFamily: AppTypography.fontPrimary,
+    changeAction: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: AppColors.primary,
+        fontFamily: AppTypography.fontPrimaryBold,
     },
     logoutBtn: {
         marginTop: 10,
-        borderWidth: 1.5,
-        borderColor: 'rgba(198,40,40,0.2)',
     },
 });

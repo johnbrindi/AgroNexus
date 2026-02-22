@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AppColors, AppTypography, CommonStyles } from '../../styles/theme';
 
-export const DashboardHeader = ({ subtitle, title, initials = "AN" }) => {
+export const DashboardHeader = ({ eyebrow, title, initials = "AN" }) => {
     return (
         <View style={styles.header}>
             <View style={styles.topRow}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.subtitle}>{subtitle}</Text>
+                    <Text style={styles.eyebrow}>{eyebrow}</Text>
                     <Text style={styles.title}>{title}</Text>
                 </View>
                 <View style={styles.avatar}>
@@ -20,50 +20,51 @@ export const DashboardHeader = ({ subtitle, title, initials = "AN" }) => {
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: AppColors.forestDark,
-        paddingHorizontal: 18,
-        paddingTop: 10,
-        paddingBottom: 14,
+        backgroundColor: AppColors.surface,
+        paddingHorizontal: 22,
+        paddingTop: 6,
+        paddingBottom: 16,
+        borderBottomWidth: 1,
+        borderColor: AppColors.border,
     },
     topRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
+        alignItems: 'flex-end',
     },
     textContainer: {
         flex: 1,
     },
-    subtitle: {
-        fontSize: 11,
-        color: AppColors.txtOnDark3,
-        fontWeight: '500',
-        letterSpacing: 0.4,
-        fontFamily: AppTypography.fontPrimaryMedium,
+    eyebrow: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: AppColors.txtMuted,
+        letterSpacing: 0.5,
         textTransform: 'uppercase',
+        marginBottom: 3,
+        fontFamily: AppTypography.fontPrimaryBold,
     },
     title: {
-        fontSize: 19,
+        fontSize: 24,
         fontWeight: '900',
-        color: AppColors.txtOnDark,
-        letterSpacing: -0.3,
-        marginTop: 2,
+        color: AppColors.txtPrimary,
+        letterSpacing: -0.5,
         fontFamily: AppTypography.fontPrimaryBlack,
     },
     avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: '#795548', // Fallback, will ideally use gradient
-        borderWidth: 2,
-        borderColor: 'rgba(245, 242, 238, 0.2)',
+        width: 46,
+        height: 46,
+        borderRadius: 23,
+        backgroundColor: AppColors.primary,
         alignItems: 'center',
         justifyContent: 'center',
+        borderWidth: 3,
+        borderColor: AppColors.primaryWash,
     },
     avatarText: {
-        fontSize: 15,
+        fontSize: 18,
         fontWeight: '900',
-        color: AppColors.txtOnDark,
+        color: AppColors.txtOnPrimary,
         fontFamily: AppTypography.fontPrimaryBlack,
     },
 });

@@ -6,21 +6,9 @@ from app.api.api_v1.api import api_router
 from app.core.config import settings
 
 app = FastAPI(
-    title=settings.PROJECT_NAME, 
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    title=settings.PROJECT_NAME,
     version="1.0.0",
-    description="""
-    ## AgroConnect API Documentation
-    
-    ### Authentication Flow:
-    1. **Register**: Use `POST /api/v1/users/` to create a new account.
-    2. **Login**: Use `POST /api/v1/auth/login/access-token` (standard OAuth2 form) to get a JWT token.
-    3. **Authorize**: Click the **'Authorize'** button at the top of this page and paste your token to access protected endpoints.
-    
-    ### Core Modules:
-    - **Users**: Manage farmer, buyer, and advisor profiles.
-    - **AI**: Get crop yield predictions (History is automatically saved specialized for the logged-in user).
-    """,
+    description="AgroConnect API Documentation"
 )
 
 # Set all CORS enabled origins

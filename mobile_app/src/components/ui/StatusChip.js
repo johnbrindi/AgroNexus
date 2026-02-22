@@ -2,38 +2,32 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { AppColors, AppTypography } from '../../styles/theme';
 
-export const StatusChip = ({ label, variant = 'green', icon }) => {
+export const StatusChip = ({ label, variant = 'ok', icon }) => {
     const getVariantStyles = () => {
         switch (variant) {
-            case 'amber':
+            case 'warn':
                 return {
-                    bg: 'rgba(216, 67, 21, 0.10)',
-                    border: 'rgba(216, 67, 21, 0.25)',
-                    txt: AppColors.amber
+                    bg: AppColors.warningBg,
+                    border: AppColors.warningBorder,
+                    txt: AppColors.warning
                 };
-            case 'slate':
+            case 'crit':
                 return {
-                    bg: 'rgba(84, 110, 122, 0.12)',
-                    border: 'rgba(84, 110, 122, 0.25)',
-                    txt: AppColors.slate
-                };
-            case 'gold':
-                return {
-                    bg: 'rgba(249, 168, 37, 0.15)',
-                    border: 'rgba(249, 168, 37, 0.35)',
-                    txt: '#7B5000'
-                };
-            case 'danger':
-                return {
-                    bg: 'rgba(198, 40, 40, 0.10)',
-                    border: 'rgba(198, 40, 40, 0.25)',
+                    bg: AppColors.dangerBg,
+                    border: AppColors.dangerBorder,
                     txt: AppColors.danger
                 };
-            default: // green
+            case 'neutral':
                 return {
-                    bg: 'rgba(45, 90, 39, 0.12)',
-                    border: 'rgba(45, 90, 39, 0.25)',
-                    txt: AppColors.forest
+                    bg: AppColors.cardSecondary,
+                    border: AppColors.borderStrong,
+                    txt: AppColors.txtSecondary
+                };
+            default: // ok
+                return {
+                    bg: AppColors.successBg,
+                    border: AppColors.successBorder,
+                    txt: AppColors.success
                 };
         }
     };
@@ -50,19 +44,17 @@ export const StatusChip = ({ label, variant = 'green', icon }) => {
 
 const styles = StyleSheet.create({
     container: {
-        display: 'inline-flex',
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 4,
-        paddingHorizontal: 9,
-        paddingVertical: 3,
+        gap: 6,
+        paddingHorizontal: 13,
+        paddingVertical: 6,
         borderRadius: 20,
-        borderWidth: 1,
+        borderWidth: 1.5,
     },
     text: {
-        fontSize: 10,
-        fontWeight: '700',
-        letterSpacing: 0.4,
+        fontSize: 13,
+        fontWeight: '800',
         fontFamily: AppTypography.fontPrimaryBold,
     },
 });

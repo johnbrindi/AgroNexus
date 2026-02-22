@@ -12,7 +12,7 @@ export const StandardButton = ({
 }) => {
     const getStyles = () => {
         let btnStyle = styles.btnPrimary;
-        let txtStyle = styles.txtOnDark;
+        let txtStyle = styles.txtOnGreen;
 
         if (variant === 'secondary') {
             btnStyle = styles.btnSecondary;
@@ -20,11 +20,14 @@ export const StandardButton = ({
         } else if (variant === 'danger') {
             btnStyle = styles.btnDanger;
             txtStyle = styles.txtWhite;
+        } else if (variant === 'white') {
+            btnStyle = styles.btnWhite;
+            txtStyle = styles.txtGreen;
         }
 
         if (size === 'small') {
-            btnStyle = { ...btnStyle, minHeight: 40 };
-            txtStyle = { ...txtStyle, fontSize: 12 };
+            btnStyle = { ...btnStyle, minHeight: 48 }; // btn-sm in brief
+            txtStyle = { ...txtStyle, fontSize: 14 };
         }
 
         return { btnStyle, txtStyle };
@@ -46,40 +49,49 @@ export const StandardButton = ({
 
 const styles = StyleSheet.create({
     base: {
-        minHeight: 48,
-        borderRadius: AppSpacing.radiusSm,
+        minHeight: 52,
+        borderRadius: AppSpacing.radiusSm, // r12
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         gap: 8,
-        paddingHorizontal: 16,
+        paddingHorizontal: 20,
+        width: '100%',
     },
     textBase: {
-        fontWeight: '700',
-        letterSpacing: 0.3,
+        fontWeight: '800',
         fontFamily: AppTypography.fontPrimaryBold,
     },
     btnPrimary: {
-        backgroundColor: AppColors.forest,
+        backgroundColor: AppColors.primary,
     },
     btnSecondary: {
-        backgroundColor: AppColors.offwhiteWarm,
+        backgroundColor: AppColors.cardSecondary,
         borderWidth: 1.5,
         borderColor: AppColors.borderStrong,
     },
     btnDanger: {
         backgroundColor: AppColors.danger,
     },
-    txtOnDark: {
-        color: AppColors.txtOnDark,
-        fontSize: 14,
+    btnWhite: {
+        backgroundColor: AppColors.card,
+        borderWidth: 2,
+        borderColor: AppColors.primarySubtle,
+    },
+    txtOnGreen: {
+        color: AppColors.txtOnPrimary,
+        fontSize: 16,
     },
     txtPrimary: {
         color: AppColors.txtPrimary,
-        fontSize: 13,
+        fontSize: 16,
+    },
+    txtGreen: {
+        color: AppColors.primary,
+        fontSize: 16,
     },
     txtWhite: {
         color: '#FFFFFF',
-        fontSize: 13,
+        fontSize: 16,
     },
 });
