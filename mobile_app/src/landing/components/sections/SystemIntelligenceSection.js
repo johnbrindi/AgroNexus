@@ -1,11 +1,16 @@
-import { View, Text, StyleSheet, ScrollView, Platform, useWindowDimensions } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
+import { Bot, Cpu, ShoppingCart, Activity, Droplet } from 'lucide-react-native';
 import { LandingColors, LandingSpacing, LandingTypography } from '../../constants';
 import { GlassCard } from '../../ui/GlassCard';
-import { AnimatedLeaf } from './AnimatedLeaf';
-import { Bot, Cpu, ShoppingCart, Activity, Droplet, Thermometer } from 'lucide-react-native';
+import { useLanguage } from '../../../context/LanguageContext';
+
+// Stub components used in the section
+const AnimatedLeaf = () => <Text style={{ fontSize: 40 }}>🌿</Text>;
 
 export const SystemIntelligenceSection = () => {
     const { width } = useWindowDimensions();
+    const { t } = useLanguage();
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1100;
 
@@ -13,11 +18,11 @@ export const SystemIntelligenceSection = () => {
         <View style={[styles.section, { paddingHorizontal: isMobile ? 16 : 48 }]}>
             <View style={styles.header}>
                 <View style={styles.sectionBadge}>
-                    <Text style={styles.badgeText}>🔬 System Intelligence</Text>
+                    <Text style={styles.badgeText}>🔬 {t('systemIntelligence')}</Text>
                 </View>
-                <Text style={[styles.title, { fontSize: isMobile ? 32 : 48 }]}>Built on Proven AgTech Architecture</Text>
+                <Text style={[styles.title, { fontSize: isMobile ? 32 : 48 }]}>{t('intelTitle')}</Text>
                 <Text style={[styles.subtitle, { fontSize: isMobile ? 16 : 18 }]}>
-                    Our platform integrates cutting-edge AI, field-hardened IoT sensors, and real-time analytics to deliver actionable insights directly to your farm.
+                    {t('intelSubtitle')}
                 </Text>
             </View>
 
@@ -28,15 +33,15 @@ export const SystemIntelligenceSection = () => {
                         <View style={[styles.iconBox, { backgroundColor: '#4CAF5015' }]}>
                             <Bot color={LandingColors.leafGreen} size={24} />
                         </View>
-                        <Text style={styles.cardTitle}>AI Engine</Text>
+                        <Text style={styles.cardTitle}>{t('aiEngineTitle')}</Text>
                     </View>
                     <Text style={styles.cardDesc}>
-                        Deep learning models trained on 2M+ crop images detect diseases, pests, and nutrient deficiencies with clinical precision.
+                        {t('aiEngineDesc')}
                     </Text>
                     <View style={styles.animContainer}>
                         <AnimatedLeaf />
                         <View style={styles.confidenceBadge}>
-                            <Text style={styles.confText}>DETECTION CONFIDENCE</Text>
+                            <Text style={styles.confText}>{t('detectionConfidence').toUpperCase()}</Text>
                             <Text style={styles.confValue}>98%</Text>
                         </View>
                     </View>
@@ -50,14 +55,14 @@ export const SystemIntelligenceSection = () => {
                                 <View style={[styles.iconBox, { backgroundColor: '#4CAF5015' }]}>
                                     <Cpu color={LandingColors.leafGreen} size={24} />
                                 </View>
-                                <Text style={styles.cardTitle}>Field Hardware</Text>
+                                <Text style={styles.cardTitle}>{t('fieldHardwareTitle')}</Text>
                             </View>
                             <Text style={styles.cardDescSmall}>
-                                Military-grade sensors monitor soil, weather, and crop health 24/7.
+                                {t('fieldHardwareDesc')}
                             </Text>
                             <View style={styles.hardwareGrid}>
-                                <HardwareItem emoji="🌡️" label="Soil Sensors" />
-                                <HardwareItem emoji="☁️" label="Weather Stations" />
+                                <HardwareItem emoji="🌡️" label={t('soilSensors')} />
+                                <HardwareItem emoji="☁️" label={t('weatherStations')} />
                             </View>
                         </GlassCard>
 
@@ -67,10 +72,10 @@ export const SystemIntelligenceSection = () => {
                                 <View style={[styles.iconBox, { backgroundColor: '#FFFFFF20' }]}>
                                     <ShoppingCart color="#FFFFFF" size={24} />
                                 </View>
-                                <Text style={[styles.cardTitle, { color: '#FFFFFF' }]}>Agro Marketplace</Text>
+                                <Text style={[styles.cardTitle, { color: '#FFFFFF' }]}>{t('agroMarketTitle')}</Text>
                             </View>
                             <Text style={[styles.cardDescSmall, { color: 'rgba(255, 255, 255, 0.7)' }]}>
-                                Connect directly with verified buyers and sellers. Fair pricing, zero middlemen.
+                                {t('agroMarketDesc')}
                             </Text>
                             <View style={styles.marketPreview}>
                                 <MarketItem label="Organic Maize" price="450 FCFA/kg" emoji="🌽" />
@@ -85,14 +90,14 @@ export const SystemIntelligenceSection = () => {
                             <View style={[styles.iconBox, { backgroundColor: '#4CAF5015' }]}>
                                 <Activity color={LandingColors.leafGreen} size={24} />
                             </View>
-                            <Text style={styles.cardTitle}>Real-Time IoT Dashboard</Text>
+                            <Text style={styles.cardTitle}>{t('realTimeIoTTitle')}</Text>
                         </View>
                         <Text style={styles.cardDescDashboard}>
-                            High-contrast, sunlight-readable metrics designed for field use. Monitor NPK levels, soil moisture, and more at a glance.
+                            {t('realTimeIoTDesc')}
                         </Text>
                         <View style={styles.metricsRow}>
-                            <MetricProgress label="Soil Moisture" value="62%" icon={<Droplet size={16} color={LandingColors.leafGreen} />} color={LandingColors.leafGreen} />
-                            <MetricProgress label="NPK Balance" value="Optimal" icon={<Activity size={16} color={LandingColors.leafGreen} />} color={LandingColors.leafGreen} />
+                            <MetricProgress label={t('soilMoisture')} value="62%" icon={<Droplet size={16} color={LandingColors.leafGreen} />} color={LandingColors.leafGreen} />
+                            <MetricProgress label={t('npkBalance')} value={t('optimal')} icon={<Activity size={16} color={LandingColors.leafGreen} />} color={LandingColors.leafGreen} />
                         </View>
                     </GlassCard>
                 </View>

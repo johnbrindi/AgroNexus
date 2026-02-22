@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
-import { LandingColors, LandingSpacing } from '../../constants';
+import { LandingColors } from '../../constants';
 import { Leaf } from 'lucide-react-native';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export const Footer = () => {
     const { width } = useWindowDimensions();
+    const { t } = useLanguage();
     const isMobile = width < 768;
 
     return (
@@ -16,24 +18,24 @@ export const Footer = () => {
                         <Text style={styles.footerLogoText}>AgroNexus</Text>
                     </View>
                     <Text style={[styles.brandDesc, isMobile && { textAlign: 'center', marginBottom: 40, alignSelf: 'center' }]}>
-                        Empowering Cameroonian agriculture through intelligent technology. Built for farmers, for farmers.
+                        {t('footerBrandDesc')}
                     </Text>
                 </View>
 
                 <View style={[styles.linkCols, { gap: isMobile ? 40 : 32 }]}>
                     <FooterCol
-                        title="Platform"
-                        links={['Features', 'Pricing', 'Hardware', 'API']}
+                        title={t('platform')}
+                        links={[t('features'), t('pricing'), t('hardware'), t('api')]}
                         isMobile={isMobile}
                     />
                     <FooterCol
-                        title="Company"
-                        links={['About', 'Careers', 'Blog', 'Contact']}
+                        title={t('company')}
+                        links={[t('about'), t('careers'), t('blog'), t('contact')]}
                         isMobile={isMobile}
                     />
                     <FooterCol
-                        title="Resources"
-                        links={['Documentation', 'Support', 'Community', 'Partners']}
+                        title={t('resources')}
+                        links={[t('documentation'), t('support'), t('community'), t('partners')]}
                         isMobile={isMobile}
                     />
                 </View>
@@ -41,7 +43,7 @@ export const Footer = () => {
 
             <View style={styles.bottom}>
                 <Text style={[styles.copyright, isMobile && { textAlign: 'center' }]}>
-                    © 2024 AgroNexus. All rights reserved. Built for Cameroonian Agriculture.
+                    © 2024 AgroNexus. {t('footerRights')}
                 </Text>
             </View>
         </View>

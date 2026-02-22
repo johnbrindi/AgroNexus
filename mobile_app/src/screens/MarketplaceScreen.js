@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, TextInput, useWindowDimensions } from 'react-native';
-import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
-import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
-import { DashboardHeader } from '../../components/shared/DashboardHeader';
-import { DashboardBottomNav } from '../../components/shared/DashboardBottomNav';
-import { CardBase } from '../../components/ui/CardBase';
-import { StandardButton } from '../../components/ui/StandardButton';
-import { StatusChip } from '../../components/ui/StatusChip';
+import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
+import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+import { DashboardHeader } from '../components/shared/DashboardHeader';
+import { DashboardBottomNav } from '../components/shared/DashboardBottomNav';
+import { CardBase } from '../components/ui/CardBase';
+import { StandardButton } from '../components/ui/StandardButton';
+import { StatusChip } from '../components/ui/StatusChip';
 
 export default function MarketplaceScreen({ navigation }) {
     const { width } = useWindowDimensions();

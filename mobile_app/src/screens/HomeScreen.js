@@ -1,14 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, useWindowDimensions } from 'react-native';
-import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
-import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
-import { DashboardHeader } from '../../components/shared/DashboardHeader';
-import { DashboardBottomNav } from '../../components/shared/DashboardBottomNav';
-import { CardBase } from '../../components/ui/CardBase';
-import { StandardButton } from '../../components/ui/StandardButton';
+import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
+import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+import { DashboardHeader } from '../components/shared/DashboardHeader';
+import { DashboardBottomNav } from '../components/shared/DashboardBottomNav';
+import { CardBase } from '../components/ui/CardBase';
+import { StandardButton } from '../components/ui/StandardButton';
+
+import { useLanguage } from '../context/LanguageContext';
+import { useWeatherData } from '../hooks/useWeatherData';
 
 export default function HomeScreen({ navigation }) {
   const { width } = useWindowDimensions();
+  const { t } = useLanguage();
+  const { weather, loading } = useWeatherData();
   const isSmallDevice = width < 375;
 
   return (
@@ -16,7 +21,7 @@ export default function HomeScreen({ navigation }) {
       <DashboardStatusBar isOnline={false} />
       <DashboardHeader
         eyebrow="THURSDAY · 21 FEB 2026"
-        title="Good morning, Amina 👋"
+        title={`${t('greeting')}, Amina 👋`}
       />
 
       <ScrollView
@@ -32,8 +37,8 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.scoreMax}>/100</Text>
             </View>
             <View style={styles.scoreInfo}>
-              <Text style={styles.scoreStatus}>Excellent Health</Text>
-              <Text style={styles.scoreDesc}>Your farm is performing 12% above seasonal average.</Text>
+              <Text style={styles.scoreStatus}>{t('excellentHealth')}</Text>
+              <Text style={styles.scoreDesc}>{t('farmPerformance')}</Text>
             </View>
           </View>
         </CardBase>
@@ -42,16 +47,16 @@ export default function HomeScreen({ navigation }) {
         <CardBase accentColor="danger" style={styles.priorityCard}>
           <View style={styles.priorityHeader}>
             <View style={styles.priorityLabelBox}>
-              <Text style={styles.priorityLabel}>PRIORITY ACTION</Text>
+              <Text style={styles.priorityLabel}>{t('priorityAction')}</Text>
             </View>
             <View style={styles.dueBox}>
-              <Text style={styles.dueText}>DUE NOW</Text>
+              <Text style={styles.dueText}>{t('dueNow')}</Text>
             </View>
           </View>
-          <Text style={styles.priorityTitle}>Irrigate Zone B</Text>
-          <Text style={styles.prioritySubtitle}>Soil moisture dropped to 28% (Critical: 35%)</Text>
+          <Text style={styles.priorityTitle}>{t('irrigateZoneB')}</Text>
+          <Text style={styles.prioritySubtitle}>{t('soilMoistureLow')}</Text>
           <StandardButton
-            title="WATER NOW"
+            title={t('waterNow')}
             variant="danger"
             size="small"
             style={styles.actionBtn}
@@ -91,34 +96,41 @@ export default function HomeScreen({ navigation }) {
 
         {/* Weather Today */}
         <CardBase style={styles.weatherCard}>
-          <View style={styles.weatherTop}>
-            <View>
-              <Text style={styles.weatherLabel}>WEATHER TODAY</Text>
-              <Text style={styles.weatherCity}>Bafoussam, Cameroon</Text>
-            </View>
-            <Text style={styles.weatherIcon}>⛅</Text>
-          </View>
-          <View style={styles.weatherMain}>
-            <Text style={styles.weatherTemp}>27°</Text>
-            <View style={styles.weatherDetails}>
-              <Text style={styles.weatherDesc}>Partly Cloudy</Text>
-              <Text style={styles.weatherExtreme}>High: 31° · Low: 22°</Text>
-            </View>
-          </View>
-          <View style={styles.weatherGrid}>
-            <View style={styles.weatherItem}>
-              <Text style={styles.weatherItemLabel}>Humidity</Text>
-              <Text style={styles.weatherItemValue}>68%</Text>
-            </View>
-            <View style={styles.weatherItem}>
-              <Text style={styles.weatherItemLabel}>Rain Chance</Text>
-              <Text style={styles.weatherItemValue}>12%</Text>
-            </View>
-            <View style={styles.weatherItem}>
-              <Text style={styles.weatherItemLabel}>Wind</Text>
-              <Text style={styles.weatherItemValue}>9 km/h</Text>
-            </View>
-          </View>
+          {loading ? (
+            <Text style={styles.weatherLoading}>{t('loading')}</Text>
+          ) : (
+            <>
+              <View style={styles.weatherTop}>
+                <View>
+                  <Text style={styles.weatherLabel}>{t('weatherToday')}</Text>
+                  <Text style={styles.weatherCity}>{weather?.location}</Text>
+                </View>
+                <Text style={styles.weatherIcon}>⛅</Text>
+              </View>
+              <View style={styles.weatherMain}>
+                <Text style={styles.weatherTemp}>{weather?.temp}°</Text>
+                <View style={styles.weatherDetails}>
+                  <Text style={styles.weatherDesc}>{t('partlyCloudy')}</Text>
+                  <Text style={styles.weatherExtreme}>{t('high')}: {weather?.high}° · {t('low')}: {weather?.low}°</Text>
+                  <Text style={styles.rainPrediction}>{t('nextRain')}: {weather?.nextRain}</Text>
+                </View>
+              </View>
+              <View style={styles.weatherGrid}>
+                <View style={styles.weatherItem}>
+                  <Text style={styles.weatherItemLabel}>{t('humidity')}</Text>
+                  <Text style={styles.weatherItemValue}>{weather?.humidity}%</Text>
+                </View>
+                <View style={styles.weatherItem}>
+                  <Text style={styles.weatherItemLabel}>{t('rainChance')}</Text>
+                  <Text style={styles.weatherItemValue}>{weather?.rainChance}%</Text>
+                </View>
+                <View style={styles.weatherItem}>
+                  <Text style={styles.weatherItemLabel}>{t('wind')}</Text>
+                  <Text style={styles.weatherItemValue}>{weather?.wind} km/h</Text>
+                </View>
+              </View>
+            </>
+          )}
         </CardBase>
       </ScrollView>
 
@@ -345,6 +357,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
     fontFamily: AppTypography.fontPrimary,
   },
+  rainPrediction: {
+    fontSize: 12,
+    color: AppColors.primary,
+    fontWeight: '700',
+    marginTop: 4,
+    fontFamily: AppTypography.fontPrimaryBold,
+  },
   weatherGrid: {
     flexDirection: 'row',
     borderTopWidth: 1,
@@ -368,5 +387,11 @@ const styles = StyleSheet.create({
     color: AppColors.txtPrimary,
     marginTop: 2,
     fontFamily: AppTypography.fontMonoBold,
+  },
+  weatherLoading: {
+    textAlign: 'center',
+    padding: 20,
+    color: AppColors.txtMuted,
+    fontFamily: AppTypography.fontPrimary,
   },
 });

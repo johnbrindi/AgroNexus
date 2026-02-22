@@ -9,7 +9,7 @@ import {
     Platform,
     ScrollView
 } from 'react-native';
-import { AppColors } from '../../styles/theme';
+import { AppColors } from '../styles/theme';
 import {
     User,
     Phone,

@@ -11,6 +11,7 @@ import { CTASection } from '../landing/components/sections/CTASection';
 import { Footer } from '../landing/components/layout/Footer';
 
 export default function LandingScreen({ navigation }) {
+    console.log("LANDING_SCREEN: Mounting");
     return (
         <View style={styles.container}>
             <Navigation navigation={navigation} />

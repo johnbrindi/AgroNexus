@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
-import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
-import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
-import { DashboardHeader } from '../../components/shared/DashboardHeader';
-import { DashboardBottomNav } from '../../components/shared/DashboardBottomNav';
-import { CardBase } from '../../components/ui/CardBase';
-import { StandardButton } from '../../components/ui/StandardButton';
+import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
+import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+import { DashboardHeader } from '../components/shared/DashboardHeader';
+import { DashboardBottomNav } from '../components/shared/DashboardBottomNav';
+import { CardBase } from '../components/ui/CardBase';
+import { StandardButton } from '../components/ui/StandardButton';
+
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ProfileScreen({ navigation }) {
     const { width } = useWindowDimensions();
+    const { t, locale, toggleLanguage } = useLanguage();
     const [offlineMode, setOfflineMode] = useState(true);
 
     return (
         <SafeAreaView style={styles.container}>
             <DashboardStatusBar isOnline={true} />
             <DashboardHeader
-                eyebrow="MEMBER PROFILE"
+                eyebrow={t('memberProfile')}
                 title="Amina Njoya"
             />
 
@@ -33,22 +36,22 @@ export default function ProfileScreen({ navigation }) {
                         <Text style={styles.userName}>Amina Njoya</Text>
                         <Text style={styles.userLoc}>Bafoussam, Cameroon</Text>
                         <View style={styles.badgeRow}>
-                            <Text style={styles.badge}>MASTER FARMER</Text>
+                            <Text style={styles.badge}>{t('masterFarmer')}</Text>
                         </View>
                     </View>
                 </View>
 
                 {/* Impact Tiles 2x2 Grid */}
                 <View style={styles.impactGrid}>
-                    <ImpactTile label="HECTARES" value="2.4" unit="ha" />
-                    <ImpactTile label="WATER SAVED" value="12k" unit="litres" />
-                    <ImpactTile label="YIELD STREAK" value="7" unit="weeks" />
-                    <ImpactTile label="HEALTH SCORE" value="87" unit="/100" />
+                    <ImpactTile label={t('hectares')} value="2.4" unit={t('unitHa')} />
+                    <ImpactTile label={t('waterSaved')} value="12k" unit={t('unitLitres')} />
+                    <ImpactTile label={t('yieldStreak')} value="7" unit={t('unitWeeks')} />
+                    <ImpactTile label={t('healthScore')} value="87" unit="/100" />
                 </View>
 
                 {/* Achievements */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>ACHIEVEMENTS</Text>
+                    <Text style={styles.sectionTitle}>{t('achievements').toUpperCase()}</Text>
                     <View style={styles.achievementGrid}>
                         <AchievementItem emoji="🌾" />
                         <AchievementItem emoji="💧" />
@@ -59,12 +62,12 @@ export default function ProfileScreen({ navigation }) {
 
                 {/* Account Settings */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>SYSTEM SETTINGS</Text>
+                    <Text style={styles.sectionTitle}>{t('systemSettings')}</Text>
                     <CardBase style={styles.settingsCard}>
                         <View style={styles.settingRow}>
                             <View style={styles.settingInfo}>
-                                <Text style={styles.settingLabel}>OFFLINE FIRST</Text>
-                                <Text style={styles.settingDesc}>Prioritize local data storage</Text>
+                                <Text style={styles.settingLabel}>{t('offlineFirst')}</Text>
+                                <Text style={styles.settingDesc}>{t('offlineDesc')}</Text>
                             </View>
                             <Switch
                                 value={offlineMode}
@@ -76,18 +79,18 @@ export default function ProfileScreen({ navigation }) {
                         <View style={styles.rowDivider} />
                         <View style={styles.settingRow}>
                             <View style={styles.settingInfo}>
-                                <Text style={styles.settingLabel}>LANGUAGE</Text>
-                                <Text style={styles.settingDesc}>English (UK)</Text>
+                                <Text style={styles.settingLabel}>{t('languageLabel')}</Text>
+                                <Text style={styles.settingDesc}>{t('language')}</Text>
                             </View>
-                            <TouchableOpacity>
-                                <Text style={styles.changeAction}>CHANGE</Text>
+                            <TouchableOpacity onPress={toggleLanguage}>
+                                <Text style={styles.changeAction}>{t('change')}</Text>
                             </TouchableOpacity>
                         </View>
                     </CardBase>
                 </View>
 
                 <StandardButton
-                    title="LOG OUT"
+                    title={t('logout')}
                     variant="danger"
                     onPress={() => navigation.navigate('Landing')}
                     style={styles.logoutBtn}

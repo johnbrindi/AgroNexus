@@ -1,11 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform, useWindowDimensions } from 'react-native';
-import { Leaf } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Platform, useWindowDimensions, Animated } from 'react-native';
+import { Leaf, Menu, X, Globe } from 'lucide-react-native';
 import { LandingColors, LandingSpacing } from '../../constants';
 import { Button } from '../../ui/Button';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export const Navigation = ({ navigation }) => {
     const { width } = useWindowDimensions();
+    const { locale, t, toggleLanguage } = useLanguage();
     const isMobile = width < 768;
     const isTablet = width < 1024;
 
@@ -18,19 +20,22 @@ export const Navigation = ({ navigation }) => {
 
             {!isTablet && (
                 <View style={styles.links}>
-                    <Text style={styles.link}>Platform</Text>
-                    <Text style={styles.link}>Solutions</Text>
-                    <Text style={styles.link}>Hardware</Text>
-                    <Text style={styles.link}>Pricing</Text>
+                    <Text style={styles.link}>{t('platform')}</Text>
+                    <Text style={styles.link}>{t('solutions')}</Text>
+                    <Text style={styles.link}>{t('hardware')}</Text>
+                    <Text style={styles.link}>{t('pricing')}</Text>
                 </View>
             )}
 
             <View style={styles.actions}>
+                <TouchableOpacity onPress={toggleLanguage} style={styles.langToggle}>
+                    <Text style={styles.langText}>{locale.toUpperCase()}</Text>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                    <Text style={styles.signInText}>Sign In</Text>
+                    <Text style={styles.signInText}>{t('signIn')}</Text>
                 </TouchableOpacity>
                 <Button
-                    title={isMobile ? "Join" : "Get Started"}
+                    title={isMobile ? t('join') : t('getStarted')}
                     onPress={() => navigation.navigate('SignUp')}
                     style={[styles.navButton, isMobile && { paddingHorizontal: 12 }]}
                 />
@@ -99,5 +104,18 @@ const styles = StyleSheet.create({
     navButton: {
         paddingVertical: 10,
         paddingHorizontal: 20,
+    },
+    langToggle: {
+        backgroundColor: LandingColors.softGray,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: LandingColors.borderGray,
+    },
+    langText: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: LandingColors.textPrimary,
     },
 });

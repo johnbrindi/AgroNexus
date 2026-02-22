@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, useWindowDimensions } from 'react-native';
 import { LandingColors, LandingSpacing } from '../../constants';
 import { GlassCard } from '../../ui/GlassCard';
@@ -6,6 +7,7 @@ import { Button } from '../../ui/Button';
 import { Badge } from '../../ui/Badge';
 
 export const HeroSection = ({ navigation }) => {
+    const { t } = useLanguage();
     const { width, height } = useWindowDimensions();
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1024;
@@ -20,26 +22,25 @@ export const HeroSection = ({ navigation }) => {
                 <View style={[styles.overlay, isMobile && { paddingTop: 40 }]}>
                     <View style={[styles.scrollContent, { paddingHorizontal: isMobile ? 12 : 48 }]}>
                         <GlassCard style={[styles.card, { padding: isMobile ? 20 : 72, backgroundColor: 'rgba(255, 255, 255, 0.4)' }]}>
-                            <Badge text="✓ Trusted by 10,000+ Farmers" />
+                            <Badge text={t('heroBadge')} />
 
                             <Text style={[styles.title, { fontSize: isMobile ? 32 : isTablet ? 48 : 64, lineHeight: isMobile ? 40 : isTablet ? 56 : 72 }]}>
-                                Transform Your Farm with{"\n"}
-                                <Text style={styles.gradientText}>Intelligent Agriculture</Text>
+                                {t('heroTitle')}
                             </Text>
 
                             <Text style={[styles.description, { fontSize: isMobile ? 15 : 18 }]}>
-                                Harness AI-powered insights, real-time IoT monitoring, and direct marketplace access to maximize your yield, reduce waste, and increase profitability.
+                                {t('heroDesc')}
                             </Text>
 
                             <View style={styles.ctaRow}>
                                 <Button
-                                    title="Get Started"
+                                    title={t('getStarted')}
                                     variant="yellow"
                                     onPress={() => navigation.navigate('SignUp')}
                                     style={[styles.primaryCta, { width: isMobile ? '100%' : 'auto' }]}
                                 />
                                 <Button
-                                    title="Watch Demo"
+                                    title={t('watchDemo')}
                                     variant="outline"
                                     onPress={() => console.log('Demo Clicked')}
                                     style={{ width: isMobile ? '100%' : 'auto' }}
@@ -47,9 +48,9 @@ export const HeroSection = ({ navigation }) => {
                             </View>
 
                             <View style={[styles.statsRow, { flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 16 : 32 }]}>
-                                <StatItem value="45%" label="Yield Increase" isMobile={isMobile} />
-                                <StatItem value="30%" label="Water Savings" isMobile={isMobile} />
-                                <StatItem value="98%" label="AI Accuracy" isMobile={isMobile} />
+                                <StatItem value="45%" label={t('yieldIncrease')} isMobile={isMobile} />
+                                <StatItem value="30%" label={t('waterSavings')} isMobile={isMobile} />
+                                <StatItem value="98%" label={t('aiAccuracy')} isMobile={isMobile} />
                             </View>
                         </GlassCard>
                     </View>

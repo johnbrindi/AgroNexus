@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, useWindowDimensions } from 'react-native';
-import { LandingColors, LandingSpacing } from '../../constants';
+import { LandingColors } from '../../constants';
 import { Quote } from 'lucide-react-native';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export const TestimonialSection = () => {
     const { width } = useWindowDimensions();
+    const { t } = useLanguage();
     const isMobile = width < 768;
 
     return (
@@ -21,23 +23,23 @@ export const TestimonialSection = () => {
                         </View>
 
                         <Text style={[styles.quoteText, { fontSize: isMobile ? 20 : 28, lineHeight: isMobile ? 32 : 42 }]}>
-                            "AgroNexus transformed my 5-hectare farm in Bafoussam. The AI recommendations increased my maize yield by 40%, and the marketplace connected me directly with buyers—no middlemen taking cuts. This is the future of Cameroonian agriculture."
+                            "{t('testimonialQuote')}"
                         </Text>
 
                         <View style={[styles.authorCard, { flexDirection: isMobile ? 'column' : 'row', alignItems: 'center' }]}>
                             <View style={[styles.avatar, isMobile && { marginBottom: 16 }]}>
-                                <Text style={styles.avatarText}>AN</Text>
+                                <Text style={styles.avatarText}>{t('testimonialAuthor').split(' ').map(n => n[0]).join('')}</Text>
                             </View>
                             <View style={{ alignItems: isMobile ? 'center' : 'flex-start' }}>
-                                <Text style={styles.authorName}>Amina Ngono</Text>
-                                <Text style={styles.authorTitle}>Commercial Farmer, West Region</Text>
+                                <Text style={styles.authorName}>{t('testimonialAuthor')}</Text>
+                                <Text style={styles.authorTitle}>{t('testimonialRole')}</Text>
                             </View>
                         </View>
 
                         <View style={[styles.metricsContainer, { gap: isMobile ? 16 : 40 }]}>
-                            <TestimonialMetric value="+40%" label="Yield Increase" isMobile={isMobile} />
-                            <TestimonialMetric value="3.2M" label="FCFA Rev" isMobile={isMobile} />
-                            <TestimonialMetric value="6 mo" label="To ROI" isMobile={isMobile} />
+                            <TestimonialMetric value="+40%" label={t('yieldIncrease')} isMobile={isMobile} />
+                            <TestimonialMetric value="3.2M" label={t('fcfaRev')} isMobile={isMobile} />
+                            <TestimonialMetric value="6 mo" label={t('toROI')} isMobile={isMobile} />
                         </View>
                     </View>
                 </View>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { AppColors } from '../../styles/theme';
+import { AppColors } from '../styles/theme';
 
 export default function ProductDetailScreen({ navigation }) {
     return (

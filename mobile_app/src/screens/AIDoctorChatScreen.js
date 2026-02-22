@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, TextInput, useWindowDimensions } from 'react-native';
-import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
-import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
-import { DashboardBottomNav } from '../../components/shared/DashboardBottomNav';
+import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
+import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+import { DashboardBottomNav } from '../components/shared/DashboardBottomNav';
 
 export default function AIDoctorChatScreen({ navigation }) {
     const { width } = useWindowDimensions();

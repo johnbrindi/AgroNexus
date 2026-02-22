@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AppColors, AppTypography } from '../../styles/theme';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const DashboardBottomNav = ({ activeTab = 'HOME', navigation }) => {
+    const { t } = useLanguage();
     const tabs = [
-        { id: 'HOME', label: 'HOME', icon: '🏡', route: 'Home' },
-        { id: 'DEVICES', label: 'DEVICES', icon: '📡', route: 'Devices', badge: '2' },
-        { id: 'AI_DOC', label: 'AI DOC', icon: '🔬', route: 'AIDoctor' },
-        { id: 'MARKET', label: 'MARKET', icon: '🛒', route: 'Marketplace' },
-        { id: 'PROFILE', label: 'PROFILE', icon: '👤', route: 'Profile' },
+        { id: 'HOME', label: t('home'), icon: '🏡', route: 'Home' },
+        { id: 'DEVICES', label: t('devices'), icon: '📡', route: 'Devices', badge: '2' },
+        { id: 'AI_DOC', label: t('scanner'), icon: '🔬', route: 'AIDoctor' },
+        { id: 'MARKET', label: t('marketplace'), icon: '🛒', route: 'Marketplace' },
+        { id: 'PROFILE', label: t('profile'), icon: '👤', route: 'Profile' },
     ];
 
     return (

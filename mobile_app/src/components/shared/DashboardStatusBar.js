@@ -2,10 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { AppColors, AppTypography } from '../../styles/theme';
 
-export const DashboardStatusBar = ({ isOnline = false, time = "09:41" }) => {
+export const DashboardStatusBar = ({ isOnline = false }) => {
     return (
         <View style={styles.statusBar}>
-            <Text style={styles.time}>{time}</Text>
             <View style={styles.rightContainer}>
                 {isOnline ? (
                     <View style={[styles.statusChip, styles.chipOnline]}>
@@ -30,15 +29,8 @@ const styles = StyleSheet.create({
         paddingTop: 14,
         paddingBottom: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end', // Align status chip to right
         alignItems: 'center',
-    },
-    time: {
-        fontFamily: AppTypography.fontMonoSemiBold || AppTypography.fontMonoBold,
-        fontSize: 16,
-        fontWeight: '600',
-        color: AppColors.txtPrimary,
-        letterSpacing: -0.2,
     },
     rightContainer: {
         flexDirection: 'row',

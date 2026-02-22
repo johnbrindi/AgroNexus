@@ -1,28 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
-import { LandingColors, LandingSpacing } from '../../constants';
+import { LandingColors } from '../../constants';
 import { Button } from '../../ui/Button';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export const CTASection = ({ navigation }) => {
     const { width } = useWindowDimensions();
+    const { t } = useLanguage();
     const isMobile = width < 768;
 
     return (
         <View style={[styles.section, { paddingHorizontal: isMobile ? 16 : 48 }]}>
             <View style={styles.content}>
-                <Text style={[styles.title, { fontSize: isMobile ? 28 : 36 }]}>Ready to Optimize Your Harvest?</Text>
+                <Text style={[styles.title, { fontSize: isMobile ? 28 : 36 }]}>{t('ctaTitle')}</Text>
                 <Text style={[styles.subtitle, { fontSize: isMobile ? 16 : 18 }]}>
-                    Join thousands of farmers already using AgroNexus to transform their productivity.
+                    {t('ctaSubtitle')}
                 </Text>
                 <View style={[styles.actions, { flexDirection: isMobile ? 'column' : 'row' }]}>
                     <Button
-                        title="Get Started Free"
+                        title={t('getStartedFree')}
                         variant="yellow"
                         onPress={() => navigation.navigate('SignUp')}
                         style={[styles.ctaButton, { width: isMobile ? '100%' : 'auto' }]}
                     />
                     <Button
-                        title="Contact Sales"
+                        title={t('talkToSales')}
                         variant="outline"
                         onPress={() => console.log('Contact Sales')}
                         style={[styles.ctaButton, { width: isMobile ? '100%' : 'auto' }]}
