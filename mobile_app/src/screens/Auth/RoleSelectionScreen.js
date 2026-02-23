@@ -15,7 +15,7 @@ import { Sprout, ShoppingBag, ChevronRight } from 'lucide-react-native';
 const { width } = Dimensions.get('window');
 
 export default function RoleSelectionScreen() {
-    const { selectRole } = useAuth();
+    const { selectRole, logout } = useAuth();
     const [loading, setLoading] = React.useState(null);
 
     const handleRoleSelection = async (role) => {
@@ -55,6 +55,9 @@ export default function RoleSelectionScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
+                <TouchableOpacity onPress={logout} style={styles.cancelBtn}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
                 <Text style={styles.title}>Welcome to AgroNexus</Text>
                 <Text style={styles.subtitle}>Choose your profile to personalize your experience</Text>
             </View>
@@ -116,6 +119,18 @@ const styles = StyleSheet.create({
         fontFamily: AppTypography.fontPrimary,
         textAlign: 'center',
         lineHeight: 24,
+    },
+    cancelBtn: {
+        position: 'absolute',
+        top: -40,
+        right: 0,
+        padding: 8,
+    },
+    cancelText: {
+        color: AppColors.clay,
+        fontSize: 14,
+        fontWeight: '700',
+        fontFamily: AppTypography.fontPrimaryBold,
     },
     selectionContainer: {
         gap: 20,

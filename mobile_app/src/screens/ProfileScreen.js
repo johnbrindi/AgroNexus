@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView,TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
 import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../components/shared/DashboardHeader';
@@ -9,10 +9,12 @@ import { CardBase } from '../components/ui/CardBase';
 import { StandardButton } from '../components/ui/StandardButton';
 
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function ProfileScreen({ navigation }) {
     const { width } = useWindowDimensions();
     const { t, locale, toggleLanguage } = useLanguage();
+    const { logout } = useAuth();
     const [offlineMode, setOfflineMode] = useState(true);
 
     return (
@@ -93,7 +95,7 @@ export default function ProfileScreen({ navigation }) {
                 <StandardButton
                     title={t('logout')}
                     variant="danger"
-                    onPress={() => navigation.navigate('Landing')}
+                    onPress={logout}
                     style={styles.logoutBtn}
                 />
             </ScrollView>
