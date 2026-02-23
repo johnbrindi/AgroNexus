@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import {
     View,
     Text,
@@ -23,6 +24,7 @@ import {
 } from 'lucide-react-native';
 
 export default function SignUpScreen({ navigation }) {
+    const { signIn } = useAuth();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
@@ -32,6 +34,20 @@ export default function SignUpScreen({ navigation }) {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [agreed, setAgreed] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSignUp = async () => {
+        if (!agreed) return;
+        setIsLoading(true);
+        try {
+            // Simulate account creation then auto-login
+            await signIn(email, password);
+        } catch (error) {
+            console.error('Sign up failed:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const renderInput = (label, value, setValue, placeholder, icon, isPassword = false, showPass = false, setShowPass = null) => (
         <View style={styles.fieldContainer}>
@@ -102,8 +118,12 @@ export default function SignUpScreen({ navigation }) {
                             </Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
-                            <Text style={styles.buttonText}>Create Account</Text>
+                        <TouchableOpacity
+                            style={[styles.button, (!agreed || isLoading) && { opacity: 0.6 }]}
+                            onPress={handleSignUp}
+                            disabled={!agreed || isLoading}
+                        >
+                            <Text style={styles.buttonText}>{isLoading ? 'Creating Account...' : 'Create Account'}</Text>
                         </TouchableOpacity>
                     </View>
 

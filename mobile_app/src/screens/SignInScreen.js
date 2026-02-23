@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import {
   View,
   Text,
@@ -20,20 +21,26 @@ import {
   Chrome, // Using Chrome as a placeholder for Google logo in lucide
 } from "lucide-react-native";
 
-export default function SignInScreen({ navigation, onLogin }) {
+export default function SignInScreen({ navigation }) {
+  const { signIn } = useAuth();
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
-    // Mock login
-    const user = {
-      name: "Jean Dupont",
-      email: loginId,
-    };
-    if (onLogin) onLogin(user);
-    navigation.navigate('Home');
+  const handleLogin = async () => {
+    if (!loginId || !password) return;
+
+    setIsLoading(true);
+    try {
+      await signIn(loginId, password);
+      // Navigation is handled automatically by App.js based on auth state
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderInput = (
@@ -130,8 +137,12 @@ export default function SignInScreen({ navigation, onLogin }) {
             </View>
 
             {/* Action Buttons */}
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-              <Text style={styles.buttonText}>Sign In</Text>
+            <TouchableOpacity
+              style={[styles.button, isLoading && { opacity: 0.7 }]}
+              onPress={handleLogin}
+              disabled={isLoading}
+            >
+              <Text style={styles.buttonText}>{isLoading ? "Signing In..." : "Sign In"}</Text>
             </TouchableOpacity>
 
             {/* Divider */}

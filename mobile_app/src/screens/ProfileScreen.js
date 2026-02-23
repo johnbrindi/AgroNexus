@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView,TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
 import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../components/shared/DashboardHeader';
