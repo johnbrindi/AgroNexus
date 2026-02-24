@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
 import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../components/shared/DashboardHeader';
-import { DashboardBottomNav } from '../components/shared/DashboardBottomNav';
 import { CardBase } from '../components/ui/CardBase';
 import { StandardButton } from '../components/ui/StandardButton';
 
@@ -18,7 +17,7 @@ export default function ProfileScreen({ navigation }) {
     const [offlineMode, setOfflineMode] = useState(true);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             <DashboardStatusBar isOnline={true} />
             <DashboardHeader
                 eyebrow={t('memberProfile')}
@@ -100,7 +99,6 @@ export default function ProfileScreen({ navigation }) {
                 />
             </ScrollView>
 
-            <DashboardBottomNav activeTab="PROFILE" navigation={navigation} />
         </SafeAreaView>
     );
 }

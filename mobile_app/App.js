@@ -3,7 +3,16 @@ import { StatusBar, StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AppColors } from './src/styles/theme';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { AppColors, AppTypography } from './src/styles/theme';
+import {
+  Home,
+  Rss,
+  Scan,
+  ShoppingCart,
+  User as UserIcon,
+  ShoppingBag
+} from 'lucide-react-native';
 // Context
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { LanguageProvider } from './src/context/LanguageContext';
@@ -22,6 +31,7 @@ import MarketplaceScreen from './src/screens/MarketplaceScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import CartScreen from './src/screens/CartScreen';
 
 import {
   useFonts,
@@ -50,6 +60,139 @@ import * as SplashScreen from 'expo-splash-screen';
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const TabBarIcon = ({ Icon, color, size, focused }) => (
+  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+    <Icon size={size} color={color} strokeWidth={focused ? 2.5 : 2} />
+  </View>
+);
+
+const FarmerTabs = () => (
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarActiveTintColor: AppColors.primary,
+      tabBarInactiveTintColor: AppColors.txtMuted,
+      tabBarStyle: styles.tabBar,
+      tabBarLabelStyle: styles.tabBarLabel,
+      backBehavior: 'initialRoute',
+    }}
+  >
+    <Tab.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        tabBarLabel: 'Home',
+        tabBarIcon: (props) => <TabBarIcon Icon={Home} {...props} />
+      }}
+    />
+    <Tab.Screen
+      name="Devices"
+      component={DevicesScreen}
+      options={{
+        tabBarLabel: 'Devices',
+        tabBarIcon: (props) => <TabBarIcon Icon={Rss} {...props} />
+      }}
+    />
+    <Tab.Screen
+      name="AIDoctor"
+      component={AIDoctorScreen}
+      options={{
+        tabBarLabel: 'Scanner',
+        tabBarIcon: (props) => <TabBarIcon Icon={Scan} {...props} />
+      }}
+    />
+    <Tab.Screen
+      name="Marketplace"
+      component={MarketplaceScreen}
+      options={{
+        tabBarLabel: 'Market',
+        tabBarIcon: (props) => <TabBarIcon Icon={ShoppingCart} {...props} />,
+        tabBarBadge: 3,
+        tabBarBadgeStyle: {
+          backgroundColor: AppColors.primary,
+          color: '#FFF',
+          fontSize: 8,
+          lineHeight: 14,
+          minWidth: 14,
+          height: 14,
+          borderRadius: 7,
+          textAlign: 'center',
+          textAlignVertical: 'center',
+          padding: 0,
+        }
+      }}
+    />
+    <Tab.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        tabBarLabel: 'Profile',
+        tabBarIcon: (props) => <TabBarIcon Icon={UserIcon} {...props} />
+      }}
+    />
+  </Tab.Navigator>
+);
+
+const ConsumerTabs = () => (
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarActiveTintColor: AppColors.primary,
+      tabBarInactiveTintColor: AppColors.txtMuted,
+      tabBarStyle: styles.tabBar,
+      tabBarLabelStyle: styles.tabBarLabel,
+      backBehavior: 'initialRoute',
+    }}
+  >
+    <Tab.Screen
+      name="UserLanding"
+      component={UserLandingScreen}
+      options={{
+        tabBarLabel: 'Home',
+        tabBarIcon: (props) => <TabBarIcon Icon={Home} {...props} />
+      }}
+    />
+    <Tab.Screen
+      name="Marketplace"
+      component={MarketplaceScreen}
+      options={{
+        tabBarLabel: 'Market',
+        tabBarIcon: (props) => <TabBarIcon Icon={ShoppingCart} {...props} />,
+        tabBarBadge: 3,
+        tabBarBadgeStyle: {
+          backgroundColor: AppColors.primary,
+          color: '#FFF',
+          fontSize: 8,
+          lineHeight: 14,
+          minWidth: 14,
+          height: 14,
+          borderRadius: 7,
+          textAlign: 'center',
+          textAlignVertical: 'center',
+          padding: 0,
+        }
+      }}
+    />
+    <Tab.Screen
+      name="Cart"
+      component={CartScreen}
+      options={{
+        tabBarLabel: 'Cart',
+        tabBarIcon: (props) => <TabBarIcon Icon={ShoppingBag} {...props} />
+      }}
+    />
+    <Tab.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        tabBarLabel: 'Profile',
+        tabBarIcon: (props) => <TabBarIcon Icon={UserIcon} {...props} />
+      }}
+    />
+  </Tab.Navigator>
+);
 
 export default function App() {
   const [forceReady, setForceReady] = React.useState(false);
@@ -145,23 +288,17 @@ const NavigationRouter = () => {
         ) : userRole === 'farmer' ? (
           // Farmer Stack
           <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Devices" component={DevicesScreen} />
-            <Stack.Screen name="AIDoctor" component={AIDoctorScreen} />
+            <Stack.Screen name="FarmerMain" component={FarmerTabs} />
             <Stack.Screen name="AIDoctorChat" component={AIDoctorChatScreen} />
-            <Stack.Screen name="Marketplace" component={MarketplaceScreen} />
             <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
           </>
         ) : (
           // Consumer Stack
           <>
-            <Stack.Screen name="UserLanding" component={UserLandingScreen} />
-            <Stack.Screen name="Marketplace" component={MarketplaceScreen} />
+            <Stack.Screen name="ConsumerMain" component={ConsumerTabs} />
             <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
           </>
         )}
       </Stack.Navigator>
@@ -173,5 +310,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: AppColors.page,
+  },
+  tabBar: {
+    backgroundColor: AppColors.card,
+    borderTopWidth: 1,
+    borderTopColor: AppColors.border,
+  },
+  tabBarLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    fontFamily: 'Manrope_700Bold',
+    marginTop: -5,
   },
 });

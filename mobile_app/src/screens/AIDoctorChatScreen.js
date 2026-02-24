@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, useWindowDimensions } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
 import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
-import { DashboardBottomNav } from '../components/shared/DashboardBottomNav';
 
 export default function AIDoctorChatScreen({ navigation }) {
     const { width } = useWindowDimensions();
@@ -74,7 +73,6 @@ export default function AIDoctorChatScreen({ navigation }) {
                 </View>
             </View>
 
-            <DashboardBottomNav activeTab="AI_DOC" navigation={navigation} />
         </SafeAreaView>
     );
 }

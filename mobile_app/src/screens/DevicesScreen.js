@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
 import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../components/shared/DashboardHeader';
-import { DashboardBottomNav } from '../components/shared/DashboardBottomNav';
 import { CardBase } from '../components/ui/CardBase';
 import { StatusChip } from '../components/ui/StatusChip';
 import { StandardButton } from '../components/ui/StandardButton';
@@ -13,7 +12,7 @@ export default function DevicesScreen({ navigation }) {
     const { width } = useWindowDimensions();
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             <DashboardStatusBar isOnline={true} />
             <DashboardHeader
                 eyebrow="IOT CONTROL CENTER"
@@ -124,7 +123,6 @@ export default function DevicesScreen({ navigation }) {
                 </CardBase>
             </ScrollView>
 
-            <DashboardBottomNav activeTab="DEVICES" navigation={navigation} />
         </SafeAreaView>
     );
 }
