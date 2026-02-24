@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { validateEmail, validatePhone, validatePassword, validateRequired } from '../utils/validation';
 import {
     View,
     Text,
@@ -35,33 +36,56 @@ export default function SignUpScreen({ navigation }) {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [agreed, setAgreed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const handleSignUp = async () => {
-        if (!agreed) return;
+        const newErrors = {};
+
+        if (!validateRequired(name)) newErrors.name = "Full name is required";
+        if (!validatePhone(phone)) newErrors.phone = "Invalid phone number";
+        if (!validateRequired(location)) newErrors.location = "Location is required";
+        if (!validateEmail(email)) newErrors.email = "Invalid email address";
+        if (!validatePassword(password)) newErrors.password = "Min. 8 characters required";
+        if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+        if (!agreed) newErrors.agreed = "You must agree to the terms";
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        setErrors({});
         setIsLoading(true);
         try {
-            // Simulate account creation then auto-login
             await signIn(email, password);
         } catch (error) {
             console.error('Sign up failed:', error);
+            setErrors({ auth: "Registration failed. Please try again." });
         } finally {
             setIsLoading(false);
         }
     };
 
-    const renderInput = (label, value, setValue, placeholder, icon, isPassword = false, showPass = false, setShowPass = null) => (
+    const renderInput = (label, value, setValue, placeholder, icon, error, fieldName, isPassword = false, showPass = false, setShowPass = null, keyboardType = 'default', autoComplete = 'off') => (
         <View style={styles.fieldContainer}>
-            <Text style={styles.label}>{label}</Text>
-            <View style={styles.inputWrapper}>
+            <Text style={[styles.label, error && { color: AppColors.danger }]}>{label}</Text>
+            <View style={[styles.inputWrapper, error && styles.inputError]}>
                 {icon}
                 <TextInput
                     style={styles.input}
                     placeholder={placeholder}
                     value={value}
-                    onChangeText={setValue}
+                    onChangeText={(text) => {
+                        setValue(text);
+                        if (errors[fieldName]) {
+                            setErrors({ ...errors, [fieldName]: null });
+                        }
+                    }}
                     placeholderTextColor={AppColors.textGrey}
                     secureTextEntry={isPassword && !showPass}
                     autoCapitalize="none"
+                    keyboardType={keyboardType}
+                    autoComplete={autoComplete}
                 />
                 {isPassword && (
                     <TouchableOpacity onPress={() => setShowPass(!showPass)}>
@@ -73,13 +97,15 @@ export default function SignUpScreen({ navigation }) {
                     </TouchableOpacity>
                 )}
             </View>
+            {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
     );
 
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
         >
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
@@ -94,29 +120,37 @@ export default function SignUpScreen({ navigation }) {
 
                     {/* Form Card */}
                     <View style={styles.card}>
-                        {renderInput('Full Name', name, setName, 'Enter your legal name', <User size={18} color={AppColors.textGrey} style={styles.icon} />)}
+                        {errors.auth && <Text style={styles.mainErrorText}>{errors.auth}</Text>}
 
-                        {renderInput('Phone Number', phone, setPhone, 'e.g., +237 ...', <Phone size={18} color={AppColors.textGrey} style={styles.icon} />)}
+                        {renderInput('Full Name', name, setName, 'Enter your legal name', <User size={18} color={errors.name ? AppColors.danger : AppColors.textGrey} style={styles.icon} />, errors.name, 'name', false, null, null, 'default', 'name')}
 
-                        {renderInput('Location', location, setLocation, 'City, Region', <MapPin size={18} color={AppColors.textGrey} style={styles.icon} />)}
+                        {renderInput('Phone Number', phone, setPhone, 'e.g., +237 ...', <Phone size={18} color={errors.phone ? AppColors.danger : AppColors.textGrey} style={styles.icon} />, errors.phone, 'phone', false, null, null, 'phone-pad', 'tel')}
 
-                        {renderInput('Email Address', email, setEmail, 'example@mail.com', <Mail size={18} color={AppColors.textGrey} style={styles.icon} />)}
+                        {renderInput('Location', location, setLocation, 'City, Region', <MapPin size={18} color={errors.location ? AppColors.danger : AppColors.textGrey} style={styles.icon} />, errors.location, 'location', false, null, null, 'default', 'postal-address')}
 
-                        {renderInput('Password', password, setPassword, 'Min. 8 chars', <Lock size={18} color={AppColors.textGrey} style={styles.icon} />, true, showPassword, setShowPassword)}
+                        {renderInput('Email Address', email, setEmail, 'example@mail.com', <Mail size={18} color={errors.email ? AppColors.danger : AppColors.textGrey} style={styles.icon} />, errors.email, 'email', false, null, null, 'email-address', 'email')}
 
-                        {renderInput('Confirm Password', confirmPassword, setConfirmPassword, 'Repeat password', <Lock size={18} color={AppColors.textGrey} style={styles.icon} />, true, showConfirmPassword, setShowConfirmPassword)}
+                        {renderInput('Password', password, setPassword, 'Min. 8 chars', <Lock size={18} color={errors.password ? AppColors.danger : AppColors.textGrey} style={styles.icon} />, errors.password, 'password', true, showPassword, setShowPassword, 'default', 'new-password')}
+
+                        {renderInput('Confirm Password', confirmPassword, setConfirmPassword, 'Repeat password', <Lock size={18} color={errors.confirmPassword ? AppColors.danger : AppColors.textGrey} style={styles.icon} />, errors.confirmPassword, 'confirmPassword', true, showConfirmPassword, setShowConfirmPassword, 'default', 'password')}
 
                         {/* Legal & Action Section */}
-                        <TouchableOpacity style={styles.complianceRow} onPress={() => setAgreed(!agreed)}>
-                            {agreed ? (
-                                <CheckSquare size={20} color={AppColors.primary} />
-                            ) : (
-                                <Square size={20} color={AppColors.textGrey} />
-                            )}
-                            <Text style={styles.complianceText}>
-                                I agree to the <Text style={styles.linkText}>Terms of Service</Text> and <Text style={styles.linkText}>Privacy Policy</Text>.
-                            </Text>
-                        </TouchableOpacity>
+                        <View>
+                            <TouchableOpacity style={styles.complianceRow} onPress={() => {
+                                setAgreed(!agreed);
+                                if (errors.agreed) setErrors({ ...errors, agreed: null });
+                            }}>
+                                {agreed ? (
+                                    <CheckSquare size={20} color={AppColors.primary} />
+                                ) : (
+                                    <Square size={20} color={errors.agreed ? AppColors.danger : AppColors.textGrey} />
+                                )}
+                                <Text style={styles.complianceText}>
+                                    I agree to the <Text style={styles.linkText}>Terms of Service</Text> and <Text style={styles.linkText}>Privacy Policy</Text>.
+                                </Text>
+                            </TouchableOpacity>
+                            {errors.agreed && <Text style={[styles.errorText, { marginTop: -12, marginBottom: 12 }]}>{errors.agreed}</Text>}
+                        </View>
 
                         <TouchableOpacity
                             style={[styles.button, (!agreed || isLoading) && { opacity: 0.6 }]}
@@ -205,6 +239,29 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: AppColors.textDark,
         padding: 0,
+    },
+    inputError: {
+        borderColor: AppColors.danger,
+        backgroundColor: AppColors.dangerBg,
+    },
+    errorText: {
+        color: AppColors.danger,
+        fontSize: 10,
+        marginTop: 4,
+        marginLeft: 2,
+        fontWeight: '500',
+    },
+    mainErrorText: {
+        color: AppColors.danger,
+        backgroundColor: AppColors.dangerBg,
+        padding: 10,
+        borderRadius: 12,
+        textAlign: 'center',
+        marginBottom: 12,
+        fontSize: 13,
+        fontWeight: '600',
+        borderWidth: 1,
+        borderColor: AppColors.danger,
     },
     complianceRow: {
         flexDirection: 'row',

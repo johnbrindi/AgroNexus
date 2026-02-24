@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { validatePassword, validateRequired } from "../utils/validation";
 import {
   View,
   Text,
@@ -28,16 +29,29 @@ export default function SignInScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleLogin = async () => {
-    if (!loginId || !password) return;
+    const newErrors = {};
+    if (!validateRequired(loginId)) {
+      newErrors.loginId = "Email or phone is required";
+    }
+    if (!validatePassword(password)) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
 
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setIsLoading(true);
     try {
       await signIn(loginId, password);
-      // Navigation is handled automatically by App.js based on auth state
     } catch (error) {
       console.error('Login failed:', error);
+      setErrors({ auth: "Invalid credentials. Please try again." });
     } finally {
       setIsLoading(false);
     }
@@ -49,22 +63,32 @@ export default function SignInScreen({ navigation }) {
     setValue,
     placeholder,
     icon,
+    error,
     isPassword = false,
     showPass = false,
     setShowPass = null,
+    keyboardType = "default",
+    autoComplete = "off",
   ) => (
     <View style={styles.fieldContainer}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputWrapper}>
+      <Text style={[styles.label, error && { color: AppColors.danger }]}>{label}</Text>
+      <View style={[styles.inputWrapper, error && styles.inputError]}>
         {icon}
         <TextInput
           style={styles.input}
           placeholder={placeholder}
           value={value}
-          onChangeText={setValue}
+          onChangeText={(text) => {
+            setValue(text);
+            if (errors[label.toLowerCase()] || errors.loginId || errors.password) {
+              setErrors({ ...errors, [label === "Email or Phone" ? "loginId" : "password"]: null });
+            }
+          }}
           placeholderTextColor={AppColors.textGrey}
           secureTextEntry={isPassword && !showPass}
           autoCapitalize="none"
+          keyboardType={keyboardType}
+          autoComplete={autoComplete}
         />
         {isPassword && (
           <TouchableOpacity onPress={() => setShowPass(!showPass)}>
@@ -76,6 +100,7 @@ export default function SignInScreen({ navigation }) {
           </TouchableOpacity>
         )}
       </View>
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 
@@ -99,12 +124,20 @@ export default function SignInScreen({ navigation }) {
 
           {/* Form Card */}
           <View style={styles.card}>
+            {errors.auth && <Text style={styles.mainErrorText}>{errors.auth}</Text>}
+
             {renderInput(
               "Email or Phone",
               loginId,
               setLoginId,
               "Enter your email or phone number",
-              <User size={18} color={AppColors.textGrey} style={styles.icon} />,
+              <User size={18} color={errors.loginId ? AppColors.danger : AppColors.textGrey} style={styles.icon} />,
+              errors.loginId,
+              false,
+              null,
+              null,
+              "email-address",
+              "username"
             )}
 
             {renderInput(
@@ -112,10 +145,13 @@ export default function SignInScreen({ navigation }) {
               password,
               setPassword,
               "Enter your password",
-              <Lock size={18} color={AppColors.textGrey} style={styles.icon} />,
+              <Lock size={18} color={errors.password ? AppColors.danger : AppColors.textGrey} style={styles.icon} />,
+              errors.password,
               true,
               showPassword,
               setShowPassword,
+              "default",
+              "password"
             )}
 
             {/* Utility Row */}
@@ -236,6 +272,29 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingHorizontal: 16,
     height: 56,
+  },
+  inputError: {
+    borderColor: AppColors.danger,
+    backgroundColor: AppColors.dangerBg,
+  },
+  errorText: {
+    color: AppColors.danger,
+    fontSize: 12,
+    marginTop: 6,
+    marginLeft: 4,
+    fontWeight: "500",
+  },
+  mainErrorText: {
+    color: AppColors.danger,
+    backgroundColor: AppColors.dangerBg,
+    padding: 12,
+    borderRadius: 12,
+    textAlign: "center",
+    marginBottom: 16,
+    fontSize: 14,
+    fontWeight: "600",
+    borderWidth: 1,
+    borderColor: AppColors.danger,
   },
   icon: {
     marginRight: 12,

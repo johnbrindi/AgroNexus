@@ -16,6 +16,8 @@ import {
 // Context
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { LanguageProvider } from './src/context/LanguageContext';
+import { CartProvider } from './src/context/CartContext';
+import { ToastProvider } from './src/context/ToastContext';
 
 // Screens
 import LandingScreen from './src/screens/LandingScreen';
@@ -244,12 +246,16 @@ export default function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
-        <SafeAreaProvider>
-          <View style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor={AppColors.page} />
-            <NavigationRouter />
-          </View>
-        </SafeAreaProvider>
+        <CartProvider>
+          <ToastProvider>
+            <SafeAreaProvider>
+              <View style={styles.container}>
+                <StatusBar barStyle="dark-content" backgroundColor={AppColors.page} />
+                <NavigationRouter />
+              </View>
+            </SafeAreaProvider>
+          </ToastProvider>
+        </CartProvider>
       </LanguageProvider>
     </AuthProvider>
   );
