@@ -30,9 +30,10 @@ import DevicesScreen from './src/screens/DevicesScreen';
 import AIDoctorScreen from './src/screens/AIDoctorScreen';
 import AIDoctorChatScreen from './src/screens/AIDoctorChatScreen';
 import MarketplaceScreen from './src/screens/MarketplaceScreen';
+import ConsumerMarketScreen from './src/screens/ConsumerMarketScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
+import { FarmerProfileScreen, ConsumerProfileScreen } from './src/screens/Profile';
 import CartScreen from './src/screens/CartScreen';
 
 import {
@@ -128,7 +129,7 @@ const FarmerTabs = () => (
     />
     <Tab.Screen
       name="Profile"
-      component={ProfileScreen}
+      component={FarmerProfileScreen}
       options={{
         tabBarLabel: 'Profile',
         tabBarIcon: (props) => <TabBarIcon Icon={UserIcon} {...props} />
@@ -158,7 +159,7 @@ const ConsumerTabs = () => (
     />
     <Tab.Screen
       name="Marketplace"
-      component={MarketplaceScreen}
+      component={ConsumerMarketScreen}
       options={{
         tabBarLabel: 'Market',
         tabBarIcon: (props) => <TabBarIcon Icon={ShoppingCart} {...props} />,
@@ -187,7 +188,7 @@ const ConsumerTabs = () => (
     />
     <Tab.Screen
       name="Profile"
-      component={ProfileScreen}
+      component={ConsumerProfileScreen}
       options={{
         tabBarLabel: 'Profile',
         tabBarIcon: (props) => <TabBarIcon Icon={UserIcon} {...props} />

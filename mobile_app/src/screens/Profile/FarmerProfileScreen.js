@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
-import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
-import { DashboardHeader } from '../components/shared/DashboardHeader';
-import { CardBase } from '../components/ui/CardBase';
-import { StandardButton } from '../components/ui/StandardButton';
+import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
+import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
+import { DashboardHeader } from '../../components/shared/DashboardHeader';
+import { CardBase } from '../../components/ui/CardBase';
+import { StandardButton } from '../../components/ui/StandardButton';
 
-import { useLanguage } from '../context/LanguageContext';
-import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 
-export default function ProfileScreen({ navigation }) {
+export default function FarmerProfileScreen({ navigation }) {
     const { width } = useWindowDimensions();
     const { t, locale, toggleLanguage } = useLanguage();
     const { logout } = useAuth();

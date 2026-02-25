@@ -110,6 +110,21 @@ const translations = {
         masterFarmer: "MASTER FARMER",
         language: "English",
         loading: "Loading...",
+
+        // Consumer Profile
+        verifiedBuyer: "Verified Buyer",
+        memberSince: "Member since",
+        walletBalance: "Wallet Balance",
+        activityHub: "Activity Hub",
+        orderTracking: "Order Tracking",
+        currentOrders: "Current Orders",
+        purchaseHistory: "Purchase History",
+        buyAgain: "Buy Again",
+        myReviews: "My Reviews",
+        agroEssentials: "Agro-Essentials",
+        savedAddresses: "Saved Addresses",
+        paymentMethods: "Payment Methods",
+        notificationSettings: "Notification Settings",
     },
     fr: {
         // Landing Page
@@ -225,6 +240,21 @@ const translations = {
         masterFarmer: "FERMIER MAÎTRE",
         language: "Français",
         loading: "Chargement...",
+
+        // Consumer Profile
+        verifiedBuyer: "Acheteur Vérifié",
+        memberSince: "Membre depuis",
+        walletBalance: "Solde du Portefeuille",
+        activityHub: "Centre d'Activité",
+        orderTracking: "Suivi de Commande",
+        currentOrders: "Commandes en cours",
+        purchaseHistory: "Historique d'Achat",
+        buyAgain: "Racheter",
+        myReviews: "Mes Avis",
+        agroEssentials: "Agro-Essentiels",
+        savedAddresses: "Adresses Enregistrées",
+        paymentMethods: "Modes de Paiement",
+        notificationSettings: "Paramètres de Notification",
     }
 };
 
