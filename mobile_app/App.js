@@ -7,8 +7,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AppColors, AppTypography } from './src/styles/theme';
 import {
   Home,
-  Rss,
-  Scan,
+  Map,
+  FileText,
   ShoppingCart,
   User as UserIcon,
   ShoppingBag
@@ -26,7 +26,7 @@ import SignUpScreen from './src/screens/SignUpScreen';
 import RoleSelectionScreen from './src/screens/Auth/RoleSelectionScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import UserLandingScreen from './src/screens/Dashboard/UserLandingScreen';
-import DevicesScreen from './src/screens/DevicesScreen';
+import FarmsScreen from './src/screens/FarmsScreen';
 import AIDoctorScreen from './src/screens/AIDoctorScreen';
 import AIDoctorChatScreen from './src/screens/AIDoctorChatScreen';
 import MarketplaceScreen from './src/screens/MarketplaceScreen';
@@ -35,6 +35,7 @@ import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
 import { FarmerProfileScreen, ConsumerProfileScreen } from './src/screens/Profile';
 import CartScreen from './src/screens/CartScreen';
+import SoilReportScreen from './src/screens/SoilReportScreen';
 
 import {
   useFonts,
@@ -91,19 +92,19 @@ const FarmerTabs = () => (
       }}
     />
     <Tab.Screen
-      name="Devices"
-      component={DevicesScreen}
+      name="Farms"
+      component={FarmsScreen}
       options={{
-        tabBarLabel: 'Devices',
-        tabBarIcon: (props) => <TabBarIcon Icon={Rss} {...props} />
+        tabBarLabel: 'Farms',
+        tabBarIcon: (props) => <TabBarIcon Icon={Map} {...props} />
       }}
     />
     <Tab.Screen
       name="AIDoctor"
       component={AIDoctorScreen}
       options={{
-        tabBarLabel: 'Scanner',
-        tabBarIcon: (props) => <TabBarIcon Icon={Scan} {...props} />
+        tabBarLabel: 'Report',
+        tabBarIcon: (props) => <TabBarIcon Icon={FileText} {...props} />
       }}
     />
     <Tab.Screen
@@ -297,6 +298,7 @@ const NavigationRouter = () => {
           <>
             <Stack.Screen name="FarmerMain" component={FarmerTabs} />
             <Stack.Screen name="AIDoctorChat" component={AIDoctorChatScreen} />
+            <Stack.Screen name="SoilReport" component={SoilReportScreen} />
             <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
           </>

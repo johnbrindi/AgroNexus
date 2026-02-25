@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, Sliders, ChevronDown, Check, LayoutGrid, List, X, Star, ArrowUpNarrowWide, ArrowDownWideNarrow, Info } from 'lucide-react-native';
 import { AppColors, AppTypography, AppSpacing } from '../styles/theme';
-import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { TrendingProductCard } from '../components/consumer/TrendingProductCard';
 
@@ -111,7 +111,7 @@ export default function ConsumerMarketScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-            <DashboardStatusBar isOnline={true} />
+
             <DashboardHeader
                 eyebrow="FRESH DEALS"
                 title="Marketplace"

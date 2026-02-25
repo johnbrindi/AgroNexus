@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
-import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { CardBase } from '../components/ui/CardBase';
 import { StatusChip } from '../components/ui/StatusChip';
@@ -13,7 +13,7 @@ export default function DevicesScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-            <DashboardStatusBar isOnline={true} />
+
             <DashboardHeader
                 eyebrow="IOT CONTROL CENTER"
                 title="Your Devices"

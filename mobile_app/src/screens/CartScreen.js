@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppTypography } from '../styles/theme';
-import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { ShoppingBag, Trash2, Plus, Minus, ArrowRight } from 'lucide-react-native';
 import { useCart } from '../context/CartContext';
@@ -14,7 +14,7 @@ export default function CartScreen() {
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-            <DashboardStatusBar isOnline={true} />
+
             <DashboardHeader
                 eyebrow="READY TO CHECKOUT"
                 title="Your Cart"

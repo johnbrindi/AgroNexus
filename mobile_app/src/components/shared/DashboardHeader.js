@@ -1,19 +1,31 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { AppColors, AppTypography, CommonStyles } from '../../styles/theme';
+import { MoreVertical } from 'lucide-react-native';
+import { AppColors, AppTypography } from '../../styles/theme';
 
-export const DashboardHeader = ({ eyebrow, title, initials = "AN" }) => {
+export const DashboardHeader = ({ title, isOnline = true }) => {
     return (
         <View style={styles.header}>
-            <View style={styles.topRow}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.eyebrow}>{eyebrow}</Text>
-                    <Text style={styles.title}>{title}</Text>
-                </View>
-                <View style={styles.avatar}>
-                    <Text style={styles.avatarText}>{initials}</Text>
-                </View>
+            {/* Title */}
+            <Text style={styles.title} numberOfLines={1}>{title}</Text>
+
+            {/* Live data chip */}
+            <View style={[styles.statusChip, isOnline ? styles.chipOnline : styles.chipOffline]}>
+                <View style={[styles.dot, isOnline ? styles.dotOk : styles.dotWarn]} />
+                <Text style={[styles.chipText, isOnline ? styles.txtOk : styles.txtWarn]}>
+                    {isOnline ? 'LIVE DATA' : 'OFFLINE'}
+                </Text>
             </View>
+
+            {/* 3-pin menu */}
+            <TouchableOpacity
+                style={styles.menuIcon}
+                onPress={() => {
+                    // fill use this later
+                }}
+            >
+                <MoreVertical size={24} color={AppColors.txtPrimary} />
+            </TouchableOpacity>
         </View>
     );
 };
@@ -22,49 +34,54 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: AppColors.surface,
         paddingHorizontal: 22,
-        paddingTop: 6,
-        paddingBottom: 16,
+        paddingVertical: 10,
         borderBottomWidth: 1,
         borderColor: AppColors.border,
-    },
-    topRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-    },
-    textContainer: {
-        flex: 1,
-    },
-    eyebrow: {
-        fontSize: 12,
-        fontWeight: '700',
-        color: AppColors.txtMuted,
-        letterSpacing: 0.5,
-        textTransform: 'uppercase',
-        marginBottom: 3,
-        fontFamily: AppTypography.fontPrimaryBold,
+        alignItems: 'center',
+        gap: 10,
     },
     title: {
-        fontSize: 24,
+        flex: 1,
+        fontSize: 23,
         fontWeight: '900',
         color: AppColors.txtPrimary,
         letterSpacing: -0.5,
         fontFamily: AppTypography.fontPrimaryBlack,
     },
-    avatar: {
-        width: 46,
-        height: 46,
-        borderRadius: 23,
-        backgroundColor: AppColors.primary,
+    statusChip: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 3,
-        borderColor: AppColors.primaryWash,
+        gap: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 20,
+        borderWidth: 1,
     },
-    avatarText: {
-        fontSize: 18,
-        fontWeight: '900',
-        color: AppColors.txtOnPrimary,
-        fontFamily: AppTypography.fontPrimaryBlack,
+    chipOnline: {
+        backgroundColor: AppColors.successBg,
+        borderColor: AppColors.successBorder,
+    },
+    chipOffline: {
+        backgroundColor: AppColors.warningBg,
+        borderColor: AppColors.warningBorder,
+    },
+    dot: {
+        width: 7,
+        height: 7,
+        borderRadius: 4,
+    },
+    dotOk: { backgroundColor: AppColors.success },
+    dotWarn: { backgroundColor: AppColors.warning },
+    chipText: {
+        fontSize: 10,
+        fontWeight: '800',
+        letterSpacing: 0.3,
+        fontFamily: AppTypography.fontPrimaryBold,
+    },
+    txtOk: { color: AppColors.success },
+    txtWarn: { color: AppColors.warning },
+    menuIcon: {
+        padding: 4,
     },
 });

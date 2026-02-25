@@ -17,7 +17,7 @@ import {
     Settings
 } from 'lucide-react-native';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../../styles/theme';
-import { DashboardStatusBar } from '../../components/shared/DashboardStatusBar';
+
 import { DashboardHeader } from '../../components/shared/DashboardHeader';
 import { CardBase } from '../../components/ui/CardBase';
 import { StandardButton } from '../../components/ui/StandardButton';
@@ -40,7 +40,7 @@ export default function FarmerProfileScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-            <DashboardStatusBar isOnline={true} />
+
 
             <ScrollView
                 style={styles.contentScroll}

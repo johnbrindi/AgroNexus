@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
-import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { CardBase } from '../components/ui/CardBase';
 import { StandardButton } from '../components/ui/StandardButton';
@@ -18,7 +18,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <DashboardStatusBar isOnline={false} />
+
       <DashboardHeader
         eyebrow="THURSDAY · 21 FEB 2026"
         title={`${t('greeting')}, Amina 👋`}

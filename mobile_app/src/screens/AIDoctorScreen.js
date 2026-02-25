@@ -1,111 +1,347 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native';
+import React, { useState } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    ImageBackground,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
-import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
+
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { CardBase } from '../components/ui/CardBase';
-import { StandardButton } from '../components/ui/StandardButton';
 import { StatusChip } from '../components/ui/StatusChip';
+import {
+    MapPin,
+    Layers,
+    Sprout,
+    FileText,
+    Zap,
+} from 'lucide-react-native';
+
+// ─────────────────────────────────────────────────────────────
+// Demo farm list — replace with real API data from backend
+// ─────────────────────────────────────────────────────────────
+const DEMO_FARMS = [
+    {
+        id: 'f1',
+        name: 'Green Valley Farm',
+        location: 'Tamale',
+        size: '0.5 acre',
+        cropType: 'Maize',
+        status: 'Optimal',
+        statusVariant: 'success',
+        imageUri: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+        lastReport: 'Jan 12, 2026',
+    },
+    {
+        id: 'f2',
+        name: 'Sunset Wheat Fields',
+        location: 'Kumasi',
+        size: '1.2 acres',
+        cropType: 'Wheat',
+        status: 'Needs Water',
+        statusVariant: 'warn',
+        imageUri: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=1200&auto=format&fit=crop',
+        lastReport: 'Feb 01, 2026',
+    },
+    {
+        id: 'f3',
+        name: 'River Delta Plot',
+        location: 'Accra',
+        size: '2.0 acres',
+        cropType: 'Soybean',
+        status: 'Optimal',
+        statusVariant: 'success',
+        imageUri: 'https://images.unsplash.com/photo-1527847263472-aa5338d178b8?q=80&w=1200&auto=format&fit=crop',
+        lastReport: 'Dec 28, 2025',
+    },
+];
+
+// ─────────────────────────────────────────────────────────────
+// Farm Report Card Component
+// ─────────────────────────────────────────────────────────────
+function FarmReportCard({ farm, onGenerate }) {
+    return (
+        <CardBase style={card.wrapper}>
+            {/* Banner Image */}
+            <ImageBackground
+                source={{ uri: farm.imageUri }}
+                style={card.banner}
+                imageStyle={card.bannerImage}
+            >
+                <View style={card.bannerOverlay}>
+                    {/* Status badge top-left */}
+                    <View style={[card.statusBadge,
+                    farm.statusVariant === 'warn'
+                        ? { backgroundColor: AppColors.warning }
+                        : { backgroundColor: AppColors.success }
+                    ]}>
+                        <Text style={card.statusText}>{farm.status}</Text>
+                    </View>
+
+                    {/* Farm name bottom-left */}
+                    <View>
+                        <Text style={card.farmName}>{farm.name}</Text>
+                        <View style={card.locationRow}>
+                            <MapPin size={12} color="rgba(255,255,255,0.85)" />
+                            <Text style={card.locationText}>{farm.location}</Text>
+                        </View>
+                    </View>
+                </View>
+            </ImageBackground>
+
+            {/* Info strip */}
+            <View style={card.infoStrip}>
+                <View style={card.infoItem}>
+                    <Layers size={14} color={AppColors.primary} />
+                    <Text style={card.infoValue}>{farm.size}</Text>
+                    <Text style={card.infoLabel}>Size</Text>
+                </View>
+                <View style={card.infoDivider} />
+                <View style={card.infoItem}>
+                    <Sprout size={14} color={AppColors.success} />
+                    <Text style={card.infoValue}>{farm.cropType}</Text>
+                    <Text style={card.infoLabel}>Crop</Text>
+                </View>
+                <View style={card.infoDivider} />
+                <View style={card.infoItem}>
+                    <FileText size={14} color={AppColors.txtMuted} />
+                    <Text style={card.infoValue}>{farm.lastReport}</Text>
+                    <Text style={card.infoLabel}>Last Report</Text>
+                </View>
+            </View>
+
+            {/* Action footer */}
+            <View style={card.footer}>
+                <Text style={card.footerHint}>Generate a new soil report for this farm</Text>
+                <TouchableOpacity
+                    style={card.generateBtn}
+                    onPress={() => onGenerate(farm)}
+                    activeOpacity={0.82}
+                >
+                    <Zap size={15} color={AppColors.txtOnPrimary} />
+                    <Text style={card.generateBtnText}>Generate Report</Text>
+                </TouchableOpacity>
+            </View>
+        </CardBase>
+    );
+}
+
+const card = StyleSheet.create({
+    wrapper: {
+        padding: 0,
+        borderRadius: AppSpacing.radiusLg,
+        overflow: 'hidden',
+        ...CommonStyles.shadowSm,
+    },
+    banner: {
+        height: 170,
+        width: '100%',
+        justifyContent: 'flex-end',
+    },
+    bannerImage: {
+        borderTopLeftRadius: AppSpacing.radiusLg,
+        borderTopRightRadius: AppSpacing.radiusLg,
+    },
+    bannerOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.48)',
+        padding: 14,
+        justifyContent: 'space-between',
+        borderTopLeftRadius: AppSpacing.radiusLg,
+        borderTopRightRadius: AppSpacing.radiusLg,
+    },
+    statusBadge: {
+        alignSelf: 'flex-start',
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 12,
+    },
+    statusText: {
+        color: '#FFF',
+        fontSize: 10,
+        fontFamily: AppTypography.fontPrimaryBold,
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
+    },
+    farmName: {
+        color: '#FFF',
+        fontSize: 20,
+        fontFamily: AppTypography.fontPrimaryBlack,
+        marginBottom: 3,
+    },
+    locationRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+    },
+    locationText: {
+        color: 'rgba(255,255,255,0.85)',
+        fontSize: 12,
+        fontFamily: AppTypography.fontPrimaryMedium,
+    },
+
+    // Info strip
+    infoStrip: {
+        flexDirection: 'row',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        backgroundColor: AppColors.card,
+        borderBottomWidth: 1,
+        borderBottomColor: AppColors.border,
+    },
+    infoItem: {
+        flex: 1,
+        alignItems: 'center',
+        gap: 3,
+    },
+    infoDivider: {
+        width: 1,
+        backgroundColor: AppColors.border,
+        marginVertical: 4,
+    },
+    infoValue: {
+        fontSize: 13,
+        fontFamily: AppTypography.fontPrimaryBold,
+        color: AppColors.txtPrimary,
+        marginTop: 2,
+    },
+    infoLabel: {
+        fontSize: 10,
+        fontFamily: AppTypography.fontPrimaryMedium,
+        color: AppColors.txtMuted,
+    },
+
+    // Footer
+    footer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        backgroundColor: AppColors.card,
+        borderBottomLeftRadius: AppSpacing.radiusLg,
+        borderBottomRightRadius: AppSpacing.radiusLg,
+        gap: 10,
+    },
+    footerHint: {
+        flex: 1,
+        fontSize: 11,
+        fontFamily: AppTypography.fontPrimaryMedium,
+        color: AppColors.txtMuted,
+        lineHeight: 16,
+    },
+    generateBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        backgroundColor: AppColors.primary,
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderRadius: AppSpacing.radiusSm,
+    },
+    generateBtnText: {
+        color: AppColors.txtOnPrimary,
+        fontSize: 13,
+        fontFamily: AppTypography.fontPrimaryBold,
+    },
+});
+
+// ─────────────────────────────────────────────────────────────
+// FARMS Sub-tab Content
+// ─────────────────────────────────────────────────────────────
+function FarmsTab({ navigation }) {
+    // Replace DEMO_FARMS with your real fetched farms array
+    const farms = DEMO_FARMS;
+
+    function handleGenerate(farm) {
+        // Navigate to the soil report screen, passing farm data.
+        // `report` prop can be passed once you have real backend data.
+        navigation.navigate('SoilReport', { farm });
+    }
+
+    return (
+        <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={farmsTab.scroll}
+            showsVerticalScrollIndicator={false}
+        >
+            <Text style={farmsTab.sectionLabel}>YOUR FARMS</Text>
+            {farms.map((farm) => (
+                <FarmReportCard key={farm.id} farm={farm} onGenerate={handleGenerate} />
+            ))}
+            <View style={{ height: 30 }} />
+        </ScrollView>
+    );
+}
+
+const farmsTab = StyleSheet.create({
+    scroll: {
+        paddingHorizontal: 20,
+        paddingTop: 16,
+        gap: 18,
+    },
+    sectionLabel: {
+        fontSize: 11,
+        fontFamily: AppTypography.fontPrimaryExtraBold,
+        color: AppColors.txtMuted,
+        letterSpacing: 1,
+        marginBottom: 4,
+    },
+});
+
+// ─────────────────────────────────────────────────────────────
+// Main Report Screen
+// ─────────────────────────────────────────────────────────────
+const TABS = ['FARMS', 'CHAT', 'HISTORY'];
 
 export default function AIDoctorScreen({ navigation }) {
-    const { width } = useWindowDimensions();
+    const [activeTab, setActiveTab] = useState('FARMS');
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-            <DashboardStatusBar isOnline={true} />
+
             <DashboardHeader
-                eyebrow="DISEASE DETECTION"
-                title="AI Doctor"
+                eyebrow="SOIL ANALYSIS"
+                title="Report"
             />
 
-            {/* v3 Sub-tab switcher */}
+            {/* Sub-tab switcher */}
             <View style={styles.tabContainer}>
-                <TouchableOpacity style={[styles.tab, styles.activeTab]}>
-                    <Text style={[styles.tabText, styles.activeTabText]}>SCANNER</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.tab}
-                    onPress={() => navigation.navigate('AIDoctorChat')}
-                >
-                    <Text style={styles.tabText}>CHAT</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tab}>
-                    <Text style={styles.tabText}>HISTORY</Text>
-                </TouchableOpacity>
+                {TABS.map((tab) => (
+                    <TouchableOpacity
+                        key={tab}
+                        style={[styles.tab, activeTab === tab && styles.activeTab]}
+                        onPress={() => {
+                            if (tab === 'CHAT') {
+                                navigation.navigate('AIDoctorChat');
+                            } else {
+                                setActiveTab(tab);
+                            }
+                        }}
+                    >
+                        <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+                            {tab}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
             </View>
 
-            <ScrollView
-                style={styles.contentScroll}
-                contentContainerStyle={styles.scrollPadding}
-                showsVerticalScrollIndicator={false}
-            >
-                {/* Scanner Section */}
-                <View style={styles.scannerWrapper}>
-                    <View style={styles.viewfinder}>
-                        {/* Brackets */}
-                        <View style={[styles.bracket, styles.tl]} />
-                        <View style={[styles.bracket, styles.tr]} />
-                        <View style={[styles.bracket, styles.bl]} />
-                        <View style={[styles.bracket, styles.br]} />
+            {/* Tab Content */}
+            {activeTab === 'FARMS' && <FarmsTab navigation={navigation} />}
 
-                        <Text style={styles.viewfinderHint}>Align leaf within frame</Text>
-
-                        {/* Confidence Glass Panel */}
-                        <View style={styles.confidenceGlass}>
-                            <Text style={styles.confLabel}>CONFIDENCE</Text>
-                            <Text style={styles.confValue}>94%</Text>
-                            <StatusChip label="DETECTED" variant="warn" />
-                        </View>
-                    </View>
-                    <StandardButton title="CAPTURE & ANALYZE" variant="primary" style={styles.scanBtn} />
+            {activeTab === 'HISTORY' && (
+                <View style={styles.emptyState}>
+                    <FileText size={42} color={AppColors.txtMuted} />
+                    <Text style={styles.emptyTitle}>No History Yet</Text>
+                    <Text style={styles.emptyBody}>
+                        Reports you generate will appear here for easy reference.
+                    </Text>
                 </View>
-
-                {/* Analysis Result / Knowledge Card */}
-                <CardBase style={styles.knowledgeCard}>
-                    <View style={styles.knowledgeHeader}>
-                        <View>
-                            <Text style={styles.kEyebrow}>KNOWLEDGE CARD</Text>
-                            <Text style={styles.kTitle}>Early Blight</Text>
-                            <Text style={styles.kSci}>Alternaria solani</Text>
-                        </View>
-                        <View style={styles.kIconBox}>
-                            <Text style={styles.kIcon}>🍄</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.kDivider} />
-
-                    <View style={styles.kSection}>
-                        <Text style={styles.kSectionTitle}>Symptom Check</Text>
-                        <Text style={styles.kText}>Dark brown spots with concentric rings. Starting on older, lower leaves.</Text>
-                    </View>
-
-                    <View style={styles.kSection}>
-                        <Text style={styles.kSectionTitle}>Treatment Plan</Text>
-                        <View style={styles.stepRow}>
-                            <Text style={styles.stepDot}>•</Text>
-                            <Text style={styles.stepText}>Prune infected foliage immediately.</Text>
-                        </View>
-                        <View style={styles.stepRow}>
-                            <Text style={styles.stepDot}>•</Text>
-                            <Text style={styles.stepText}>Avoid overhead irrigation.</Text>
-                        </View>
-                        <View style={styles.stepRow}>
-                            <Text style={styles.stepDot}>•</Text>
-                            <Text style={styles.stepText}>Apply copper-based fungicide.</Text>
-                        </View>
-                    </View>
-
-                    <StandardButton
-                        title="VIEW TREATMENT GUIDE"
-                        variant="secondary"
-                        size="small"
-                        style={styles.guideBtn}
-                    />
-                </CardBase>
-            </ScrollView>
-
+            )}
         </SafeAreaView>
     );
 }
@@ -117,21 +353,21 @@ const styles = StyleSheet.create({
     },
     tabContainer: {
         flexDirection: 'row',
-        paddingHorizontal: 22,
-        paddingBottom: 16,
-        gap: 12,
+        paddingHorizontal: 20,
+        paddingBottom: 14,
+        gap: 10,
     },
     tab: {
-        paddingVertical: 8,
+        paddingVertical: 7,
         paddingHorizontal: 16,
         borderRadius: 20,
-        backgroundColor: AppColors.inputBg,
+        backgroundColor: AppColors.surface,
         borderWidth: 1,
         borderColor: AppColors.border,
     },
     activeTab: {
-        backgroundColor: '#000',
-        borderColor: '#000',
+        backgroundColor: AppColors.primary,
+        borderColor: AppColors.primary,
     },
     tabText: {
         fontSize: 11,
@@ -142,152 +378,23 @@ const styles = StyleSheet.create({
     activeTabText: {
         color: '#FFF',
     },
-    contentScroll: {
+    emptyState: {
         flex: 1,
-    },
-    scrollPadding: {
-        paddingHorizontal: 22,
-        paddingBottom: 30,
-        gap: 20,
-    },
-    scannerWrapper: {
-        gap: 15,
-    },
-    viewfinder: {
-        height: 280,
-        backgroundColor: '#000',
-        borderRadius: AppSpacing.radiusLg,
-        position: 'relative',
         alignItems: 'center',
         justifyContent: 'center',
-        overflow: 'hidden',
+        paddingHorizontal: 40,
+        gap: 12,
     },
-    bracket: {
-        position: 'absolute',
-        width: 40,
-        height: 40,
-        borderColor: AppColors.primary,
-        borderWidth: 4,
-    },
-    tl: { top: 30, left: 30, borderRightWidth: 0, borderBottomWidth: 0 },
-    tr: { top: 30, right: 30, borderLeftWidth: 0, borderBottomWidth: 0 },
-    bl: { bottom: 30, left: 30, borderRightWidth: 0, borderTopWidth: 0 },
-    br: { bottom: 30, right: 30, borderLeftWidth: 0, borderTopWidth: 0 },
-    viewfinderHint: {
-        color: 'rgba(255,255,255,0.6)',
-        fontSize: 13,
-        fontWeight: '700',
-        marginTop: 180,
+    emptyTitle: {
+        fontSize: 18,
         fontFamily: AppTypography.fontPrimaryBold,
+        color: AppColors.txtPrimary,
     },
-    confidenceGlass: {
-        position: 'absolute',
-        top: 20,
-        right: 20,
-        backgroundColor: 'rgba(255,255,255,0.9)',
-        padding: 12,
-        borderRadius: AppSpacing.radiusMd,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.2)',
-    },
-    confLabel: {
-        fontSize: 9,
-        fontWeight: '800',
+    emptyBody: {
+        fontSize: 13,
+        fontFamily: AppTypography.fontPrimaryMedium,
         color: AppColors.txtMuted,
-        letterSpacing: 0.5,
-        fontFamily: AppTypography.fontPrimaryExtraBold,
-    },
-    confValue: {
-        fontSize: 24,
-        fontWeight: '900',
-        color: AppColors.txtPrimary,
-        fontFamily: AppTypography.fontMonoBold,
-        marginVertical: 4,
-    },
-    scanBtn: {
-        marginTop: 5,
-    },
-    knowledgeCard: {
-        padding: 22,
-        borderRadius: AppSpacing.radiusLg,
-    },
-    knowledgeHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    kEyebrow: {
-        fontSize: 10,
-        fontWeight: '800',
-        color: AppColors.txtMuted,
-        letterSpacing: 1,
-        fontFamily: AppTypography.fontPrimaryExtraBold,
-        marginBottom: 6,
-    },
-    kTitle: {
-        fontSize: 24,
-        fontWeight: '900',
-        color: AppColors.txtPrimary,
-        fontFamily: AppTypography.fontPrimaryBlack,
-    },
-    kSci: {
-        fontSize: 14,
-        color: AppColors.txtSecondary,
-        fontStyle: 'italic',
-        marginTop: 2,
-        fontFamily: AppTypography.fontPrimary,
-    },
-    kIconBox: {
-        width: 48,
-        height: 48,
-        borderRadius: 12,
-        backgroundColor: AppColors.inputBg,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    kIcon: {
-        fontSize: 24,
-    },
-    kDivider: {
-        height: 1,
-        backgroundColor: AppColors.border,
-        marginVertical: 20,
-    },
-    kSection: {
-        marginBottom: 20,
-    },
-    kSectionTitle: {
-        fontSize: 15,
-        fontWeight: '900',
-        color: AppColors.txtPrimary,
-        fontFamily: AppTypography.fontPrimaryBlack,
-        marginBottom: 8,
-    },
-    kText: {
-        fontSize: 14,
-        color: AppColors.txtSecondary,
+        textAlign: 'center',
         lineHeight: 20,
-        fontFamily: AppTypography.fontPrimary,
-    },
-    stepRow: {
-        flexDirection: 'row',
-        gap: 8,
-        marginBottom: 6,
-    },
-    stepDot: {
-        fontSize: 14,
-        color: AppColors.primary,
-        fontWeight: '900',
-    },
-    stepText: {
-        flex: 1,
-        fontSize: 14,
-        color: AppColors.txtSecondary,
-        lineHeight: 20,
-        fontFamily: AppTypography.fontPrimary,
-    },
-    guideBtn: {
-        marginTop: 10,
     },
 });
