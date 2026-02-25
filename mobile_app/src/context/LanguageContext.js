@@ -125,6 +125,24 @@ const translations = {
         savedAddresses: "Saved Addresses",
         paymentMethods: "Payment Methods",
         notificationSettings: "Notification Settings",
+
+        // Farmer Profile
+        verifiedProducer: "Verified Producer",
+        onAgroNexus: "on AgroNexus",
+        primaryCrops: "Primary Crops",
+        farmStats: "Farm Stats",
+        ordersCompleted: "Orders completed",
+        responseTimeLabel: "Response Time",
+        repliesIn: "Replies within",
+        locationZone: "Farming Zone",
+        productShowcase: "Product Showcase",
+        activeListings: "Active Listings",
+        soldOut: "Sold Out",
+        seasonal: "Seasonal",
+        followRestock: "Follow for Restock",
+        repliesWithinHour: "Replies within 1 hour",
+        completedOrdersVal: "500+ Orders completed",
+        experienceVal: "5 Years on AgroNexus",
     },
     fr: {
         // Landing Page
@@ -255,6 +273,24 @@ const translations = {
         savedAddresses: "Adresses Enregistrées",
         paymentMethods: "Modes de Paiement",
         notificationSettings: "Paramètres de Notification",
+
+        // Farmer Profile
+        verifiedProducer: "Producteur Vérifié",
+        onAgroNexus: "sur AgroNexus",
+        primaryCrops: "Cultures Principales",
+        farmStats: "Stats de la Ferme",
+        ordersCompleted: "Commandes terminées",
+        responseTimeLabel: "Temps de Réponse",
+        repliesIn: "Répond en",
+        locationZone: "Zone Agricole",
+        productShowcase: "Vitrine de Produits",
+        activeListings: "Annonces Actives",
+        soldOut: "Épuisé",
+        seasonal: "Saisonnier",
+        followRestock: "Suivre pour Réapprovisionnement",
+        repliesWithinHour: "Répond en moins d'une heure",
+        completedOrdersVal: "500+ Commandes terminées",
+        experienceVal: "5 ans sur AgroNexus",
     }
 };
 

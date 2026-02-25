@@ -9,10 +9,11 @@ import {
     Image,
     Dimensions,
     Platform,
-    StatusBar
+    StatusBar,
+    Modal
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search, Sliders, ChevronDown, Check, LayoutGrid, List } from 'lucide-react-native';
+import { Search, Sliders, ChevronDown, Check, LayoutGrid, List, X, Star, ArrowUpNarrowWide, ArrowDownWideNarrow, Info } from 'lucide-react-native';
 import { AppColors, AppTypography, AppSpacing } from '../styles/theme';
 import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../components/shared/DashboardHeader';
@@ -60,9 +61,11 @@ export default function ConsumerMarketScreen({ navigation }) {
     const [filterMode, setFilterMode] = useState('all'); // 'all' or 'categories'
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedItemType, setSelectedItemType] = useState(null);
+    const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+    const [sortBy, setSortBy] = useState('newest'); // 'newest', 'low-to-high', 'high-to-low', 'rating', 'stock'
 
     const filteredProducts = useMemo(() => {
-        return ALL_PRODUCTS.filter(product => {
+        let result = ALL_PRODUCTS.filter(product => {
             const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 product.sellerName.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -74,7 +77,22 @@ export default function ConsumerMarketScreen({ navigation }) {
                 return matchesSearch && matchesCategory && matchesItemType;
             }
         });
-    }, [searchQuery, filterMode, selectedCategory, selectedItemType]);
+
+        // Sorting Logic
+        switch (sortBy) {
+            case 'low-to-high':
+                return result.sort((a, b) => parseInt(a.price) - parseInt(b.price));
+            case 'high-to-low':
+                return result.sort((a, b) => parseInt(b.price) - parseInt(a.price));
+            case 'rating':
+                return result.sort((a, b) => parseFloat(b.sellerRating) - parseFloat(a.sellerRating));
+            case 'stock':
+                return result.sort((a, b) => parseInt(b.stock) - parseInt(a.stock));
+            case 'newest':
+            default:
+                return result.sort((a, b) => b.id.localeCompare(a.id));
+        }
+    }, [searchQuery, filterMode, selectedCategory, selectedItemType, sortBy]);
 
     const handleCategoryPress = (cat) => {
         setSelectedCategory(cat);
@@ -117,7 +135,10 @@ export default function ConsumerMarketScreen({ navigation }) {
                             </TouchableOpacity>
                         )}
                     </View>
-                    <TouchableOpacity style={styles.filterBtn}>
+                    <TouchableOpacity
+                        style={styles.filterBtn}
+                        onPress={() => setIsFilterModalVisible(true)}
+                    >
                         <Sliders size={20} color={AppColors.txtPrimary} />
                     </TouchableOpacity>
                 </View>
@@ -220,9 +241,80 @@ export default function ConsumerMarketScreen({ navigation }) {
 
                 <View style={styles.bottomGap} />
             </ScrollView>
+
+            {/* Filter Modal */}
+            <Modal
+                visible={isFilterModalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={() => setIsFilterModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>Filter & Sort</Text>
+                            <TouchableOpacity onPress={() => setIsFilterModalVisible(false)} style={styles.closeBtn}>
+                                <X size={24} color={AppColors.txtPrimary} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <Text style={styles.filterSectionTitle}>Sort By</Text>
+                        <View style={styles.sortOptions}>
+                            <SortOption
+                                icon={<ArrowUpNarrowWide size={18} color={sortBy === 'low-to-high' ? '#FFF' : AppColors.txtMuted} />}
+                                label="Price: Low to High"
+                                active={sortBy === 'low-to-high'}
+                                onPress={() => setSortBy('low-to-high')}
+                            />
+                            <SortOption
+                                icon={<ArrowDownWideNarrow size={18} color={sortBy === 'high-to-low' ? '#FFF' : AppColors.txtMuted} />}
+                                label="Price: High to Low"
+                                active={sortBy === 'high-to-low'}
+                                onPress={() => setSortBy('high-to-low')}
+                            />
+                            <SortOption
+                                icon={<Star size={18} color={sortBy === 'rating' ? '#FFF' : AppColors.txtMuted} />}
+                                label="Highest Rated"
+                                active={sortBy === 'rating'}
+                                onPress={() => setSortBy('rating')}
+                            />
+                            <SortOption
+                                icon={<Info size={18} color={sortBy === 'stock' ? '#FFF' : AppColors.txtMuted} />}
+                                label="In Stock"
+                                active={sortBy === 'stock'}
+                                onPress={() => setSortBy('stock')}
+                            />
+                            <SortOption
+                                icon={<LayoutGrid size={18} color={sortBy === 'newest' ? '#FFF' : AppColors.txtMuted} />}
+                                label="Latest Arrivals"
+                                active={sortBy === 'newest'}
+                                onPress={() => setSortBy('newest')}
+                            />
+                        </View>
+
+                        <TouchableOpacity
+                            style={styles.applyBtn}
+                            onPress={() => setIsFilterModalVisible(false)}
+                        >
+                            <Text style={styles.applyBtnText}>Apply Filters</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 }
+
+const SortOption = ({ icon, label, active, onPress }) => (
+    <TouchableOpacity
+        style={[styles.sortBtn, active && styles.activeSortBtn]}
+        onPress={onPress}
+    >
+        {icon}
+        <Text style={[styles.sortText, active && styles.activeSortText]}>{label}</Text>
+        {active && <Check size={16} color="#FFF" />}
+    </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
     container: {
@@ -383,8 +475,8 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     activeTabularItem: {
-        backgroundColor: AppColors.forest,
-        borderColor: AppColors.forest,
+        backgroundColor: AppColors.primary,
+        borderColor: AppColors.primary,
     },
     tabularText: {
         fontSize: 13,
@@ -419,5 +511,92 @@ const styles = StyleSheet.create({
     },
     bottomGap: {
         height: 100,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'flex-end',
+    },
+    modalContent: {
+        backgroundColor: '#FFF',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        padding: 25,
+        paddingBottom: 40,
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 25,
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: '900',
+        color: AppColors.txtPrimary,
+        fontFamily: AppTypography.fontPrimaryBlack,
+    },
+    closeBtn: {
+        padding: 5,
+    },
+    filterSectionTitle: {
+        fontSize: 14,
+        fontWeight: '800',
+        color: AppColors.txtMuted,
+        marginBottom: 15,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+    },
+    sortOptions: {
+        gap: 10,
+        marginBottom: 30,
+    },
+    sortBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 15,
+        backgroundColor: AppColors.inputBg,
+        borderRadius: 15,
+        gap: 12,
+        borderWidth: 1,
+        borderColor: 'transparent',
+    },
+    activeSortBtn: {
+        backgroundColor: AppColors.primary,
+        borderColor: AppColors.primary,
+    },
+    sortText: {
+        flex: 1,
+        fontSize: 15,
+        fontWeight: '700',
+        color: AppColors.txtSecondary,
+        fontFamily: AppTypography.fontPrimaryBold,
+    },
+    activeSortText: {
+        color: '#FFF',
+    },
+    applyBtn: {
+        backgroundColor: AppColors.primary,
+        height: 55,
+        borderRadius: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        ...Platform.select({
+            ios: {
+                shadowColor: AppColors.primary,
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 10,
+            },
+            android: {
+                elevation: 5,
+            },
+        }),
+    },
+    applyBtnText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: '900',
+        fontFamily: AppTypography.fontPrimaryBlack,
     },
 });
