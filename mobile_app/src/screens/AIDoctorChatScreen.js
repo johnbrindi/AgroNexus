@@ -16,9 +16,9 @@ export default function AIDoctorChatScreen({ navigation }) {
                 <View style={styles.tabContainer}>
                     <TouchableOpacity
                         style={styles.tab}
-                        onPress={() => navigation.navigate('AIDoctor')}
+                        onPress={() => navigation.navigate('FarmerMain', { screen: 'AIDoctor' })}
                     >
-                        <Text style={styles.tabText}>SCANNER</Text>
+                        <Text style={styles.tabText}>REPORT</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.tab, styles.activeTab]}>
                         <Text style={[styles.tabText, styles.activeTabText]}>CHAT</Text>

@@ -31,29 +31,29 @@ export const ToastProvider = ({ children }) => {
         Animated.parallel([
             Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 300,
+                duration: 250,
                 useNativeDriver: true,
             }),
             Animated.timing(slideAnim, {
                 toValue: 50, // Distance from top
-                duration: 400,
+                duration: 300,
                 useNativeDriver: true,
             })
         ]).start();
 
-        timeoutRef.current = setTimeout(hideToast, 4000);
+        timeoutRef.current = setTimeout(hideToast, 1500);
     }, []);
 
     const hideToast = useCallback(() => {
         Animated.parallel([
             Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 300,
+                duration: 250,
                 useNativeDriver: true,
             }),
             Animated.timing(slideAnim, {
                 toValue: -100,
-                duration: 400,
+                duration: 300,
                 useNativeDriver: true,
             })
         ]).start(() => {

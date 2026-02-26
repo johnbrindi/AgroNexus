@@ -21,6 +21,7 @@ import { AppColors, AppTypography, AppSpacing, CommonStyles } from '../styles/th
 import { DashboardStatusBar } from '../components/shared/DashboardStatusBar';
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { TrendingProductCard } from '../components/consumer/TrendingProductCard';
+import { useCart } from '../context/CartContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -69,6 +70,7 @@ export default function MarketplaceScreen({ navigation }) {
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
     const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
     const [isCartModalVisible, setIsCartModalVisible] = useState(false);
+    const { cartCount } = useCart();
 
     const [sortBy, setSortBy] = useState('newest');
 
@@ -138,9 +140,11 @@ export default function MarketplaceScreen({ navigation }) {
                         onPress={() => setIsCartModalVisible(true)}
                     >
                         <ShoppingCart size={24} color={AppColors.txtPrimary} />
-                        <View style={styles.cartBadge}>
-                            <Text style={styles.cartBadgeText}>2</Text>
-                        </View>
+                        {cartCount > 0 && (
+                            <View style={styles.cartBadge}>
+                                <Text style={styles.cartBadgeText}>{cartCount}</Text>
+                            </View>
+                        )}
                     </TouchableOpacity>
                 </View>
             </View>
@@ -518,7 +522,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: -4,
         right: -4,
-        backgroundColor: AppColors.error,
+        backgroundColor: AppColors.danger,
         width: 18,
         height: 18,
         borderRadius: 9,
