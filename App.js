@@ -27,8 +27,8 @@ import RoleSelectionScreen from './src/screens/Auth/RoleSelectionScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import UserLandingScreen from './src/screens/Dashboard/UserLandingScreen';
 import FarmsScreen from './src/screens/FarmsScreen';
-import AIDoctorScreen from './src/screens/AIDoctorScreen';
-import AIDoctorChatScreen from './src/screens/AIDoctorChatScreen';
+import ReportScreen from './src/screens/ReportScreen';
+import ReportChatScreen from './src/screens/ReportChatScreen';
 import MarketplaceScreen from './src/screens/MarketplaceScreen';
 import ConsumerMarketScreen from './src/screens/ConsumerMarketScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
@@ -36,6 +36,8 @@ import PaymentScreen from './src/screens/PaymentScreen';
 import { FarmerProfileScreen, ConsumerProfileScreen } from './src/screens/Profile';
 import CartScreen from './src/screens/CartScreen';
 import SoilReportScreen from './src/screens/SoilReportScreen';
+import FarmDetailsScreen from './src/screens/FarmDetailsScreen';
+import ReportHistoryScreen from './src/screens/ReportHistoryScreen';
 
 import {
   useFonts,
@@ -100,8 +102,8 @@ const FarmerTabs = () => (
       }}
     />
     <Tab.Screen
-      name="AIDoctor"
-      component={AIDoctorScreen}
+      name="Report"
+      component={ReportScreen}
       options={{
         tabBarLabel: 'Report',
         tabBarIcon: (props) => <TabBarIcon Icon={FileText} {...props} />
@@ -297,8 +299,10 @@ const NavigationRouter = () => {
           // Farmer Stack
           <>
             <Stack.Screen name="FarmerMain" component={FarmerTabs} />
-            <Stack.Screen name="AIDoctorChat" component={AIDoctorChatScreen} />
+            <Stack.Screen name="ReportChat" component={ReportChatScreen} />
+            <Stack.Screen name="ReportHistory" component={ReportHistoryScreen} />
             <Stack.Screen name="SoilReport" component={SoilReportScreen} />
+            <Stack.Screen name="FarmDetails" component={FarmDetailsScreen} />
             <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
           </>

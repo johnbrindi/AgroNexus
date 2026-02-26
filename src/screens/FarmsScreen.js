@@ -50,7 +50,20 @@ export default function FarmsScreen({ navigation }) {
                     </ImageBackground>
 
                     <View style={styles.actionRow}>
-                        <StandardButton title="VIEW DETAILS" variant="secondary" size="small" style={styles.btnFlex} />
+                        <StandardButton
+                            title="VIEW DETAILS"
+                            variant="secondary"
+                            size="small"
+                            style={styles.btnFlex}
+                            onPress={() => navigation.navigate('FarmDetails', {
+                                farm: {
+                                    name: 'Green Valley Farm',
+                                    location: 'North Sector, Block A',
+                                    size: '50 Acres',
+                                    cropType: 'Corn'
+                                }
+                            })}
+                        />
                     </View>
                 </CardBase>
 
@@ -82,7 +95,20 @@ export default function FarmsScreen({ navigation }) {
                     </ImageBackground>
 
                     <View style={styles.actionRow}>
-                        <StandardButton title="VIEW DETAILS" variant="secondary" size="small" style={styles.btnFlex} />
+                        <StandardButton
+                            title="VIEW DETAILS"
+                            variant="secondary"
+                            size="small"
+                            style={styles.btnFlex}
+                            onPress={() => navigation.navigate('FarmDetails', {
+                                farm: {
+                                    name: 'Sunset Wheat Fields',
+                                    location: 'South Sector, Block D',
+                                    size: '120 Acres',
+                                    cropType: 'Wheat'
+                                }
+                            })}
+                        />
                     </View>
                 </CardBase>
             </ScrollView>

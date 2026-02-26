@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
+import { useLanguage } from '../context/LanguageContext';
 
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { CardBase } from '../components/ui/CardBase';
@@ -296,10 +297,11 @@ const farmsTab = StyleSheet.create({
 // ─────────────────────────────────────────────────────────────
 // Main Report Screen
 // ─────────────────────────────────────────────────────────────
-const TABS = ['FARMS', 'CHAT', 'HISTORY'];
+const TABS = ['REPORT', 'CHAT', 'HISTORY'];
 
-export default function AIDoctorScreen({ navigation }) {
-    const [activeTab, setActiveTab] = useState('FARMS');
+export default function ReportScreen({ navigation }) {
+    const { t } = useLanguage();
+    const [activeTab, setActiveTab] = useState('REPORT');
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
@@ -317,21 +319,23 @@ export default function AIDoctorScreen({ navigation }) {
                         style={[styles.tab, activeTab === tab && styles.activeTab]}
                         onPress={() => {
                             if (tab === 'CHAT') {
-                                navigation.navigate('AIDoctorChat');
+                                navigation.navigate('ReportChat');
+                            } else if (tab === 'HISTORY') {
+                                navigation.navigate('ReportHistory');
                             } else {
                                 setActiveTab(tab);
                             }
                         }}
                     >
                         <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
-                            {tab}
+                            {tab === 'REPORT' ? t('report') : tab}
                         </Text>
                     </TouchableOpacity>
                 ))}
             </View>
 
             {/* Tab Content */}
-            {activeTab === 'FARMS' && <FarmsTab navigation={navigation} />}
+            {activeTab === 'REPORT' && <FarmsTab navigation={navigation} />}
 
             {activeTab === 'HISTORY' && (
                 <View style={styles.emptyState}>

@@ -8,7 +8,7 @@ export const DashboardBottomNav = ({ activeTab = 'HOME', navigation }) => {
     const tabs = [
         { id: 'HOME', label: t('home'), icon: '🏡', route: 'Home' },
         { id: 'DEVICES', label: t('devices'), icon: '📡', route: 'Devices', badge: '2' },
-        { id: 'AI_DOC', label: t('scanner'), icon: '🔬', route: 'AIDoctor' },
+        { id: 'REPORT', label: t('report'), icon: '📄', route: 'Report' },
         { id: 'MARKET', label: t('marketplace'), icon: '🛒', route: 'Marketplace' },
         { id: 'PROFILE', label: t('profile'), icon: '👤', route: 'Profile' },
     ];

@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Home, Bluetooth, Leaf, ShoppingBag } from 'lucide-react-native';
+import { Home, Bluetooth, FileText, ShoppingBag } from 'lucide-react-native';
 import { AppColors } from '../styles/theme';
 
 export default function BottomNav({ navigation, active }) {
     const navItems = [
         { id: 'Home', icon: Home, label: 'Home' },
         { id: 'Devices', icon: Bluetooth, label: 'Devices' },
-        { id: 'AIDoctor', icon: Leaf, label: 'AI Doctor' },
+        { id: 'Report', icon: FileText, label: 'Report' },
         { id: 'Marketplace', icon: ShoppingBag, label: 'Market' }
     ];
 

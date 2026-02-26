@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
+import { useLanguage } from '../context/LanguageContext';
 
 
-export default function AIDoctorChatScreen({ navigation }) {
+export default function ReportChatScreen({ navigation }) {
     const { width } = useWindowDimensions();
+    const { t } = useLanguage();
 
     return (
         <SafeAreaView style={styles.container}>
@@ -16,14 +18,17 @@ export default function AIDoctorChatScreen({ navigation }) {
                 <View style={styles.tabContainer}>
                     <TouchableOpacity
                         style={styles.tab}
-                        onPress={() => navigation.navigate('AIDoctor')}
+                        onPress={() => navigation.navigate('Report')}
                     >
-                        <Text style={styles.tabText}>SCANNER</Text>
+                        <Text style={styles.tabText}>{t('report')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.tab, styles.activeTab]}>
                         <Text style={[styles.tabText, styles.activeTabText]}>CHAT</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tab}>
+                    <TouchableOpacity
+                        style={styles.tab}
+                        onPress={() => navigation.navigate('ReportHistory')}
+                    >
                         <Text style={styles.tabText}>HISTORY</Text>
                     </TouchableOpacity>
                 </View>
@@ -64,7 +69,7 @@ export default function AIDoctorChatScreen({ navigation }) {
                 <View style={styles.inputWrapper}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Ask AI Doctor..."
+                        placeholder="Ask AI..."
                         placeholderTextColor={AppColors.txtMuted}
                     />
                     <TouchableOpacity style={styles.sendBtn}>

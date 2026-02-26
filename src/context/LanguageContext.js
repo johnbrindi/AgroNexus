@@ -63,6 +63,7 @@ const translations = {
 
         // App Nav
         home: "HOME",
+        report: "REPORT",
         scanner: "SCANNER",
         marketplace: "MARKETPLACE",
         devices: "DEVICES",
@@ -211,6 +212,7 @@ const translations = {
 
         // App Nav
         home: "ACCUEIL",
+        report: "RAPPORT",
         scanner: "SCANNER",
         marketplace: "MARCHÉ",
         devices: "APPAREILS",

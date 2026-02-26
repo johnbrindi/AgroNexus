@@ -18,8 +18,8 @@ This roadmap is designed for the next developer to implement the features inside
 The following folders are waiting for implementation:
 - **Home**: `src/screens/Home/index.js` (Reference `src/screens/HomeScreen.js`)
 - **Devices**: `src/screens/Devices/index.js` (Reference `src/screens/DevicesScreen.js`)
-- **Scanner**: `src/screens/AIDoctor/Scanner.js` (Reference `src/screens/AIDoctorScreen.js`)
-- **Chat**: `src/screens/AIDoctor/Chat.js` (Reference `src/screens/AIDoctorChatScreen.js`)
+- **Scanner**: `src/screens/ReportScreen.js`
+- **Chat**: `src/screens/ReportChatScreen.js`
 - **Marketplace**: `src/screens/Marketplace/index.js` (Reference `src/screens/MarketplaceScreen.js`)
 
 ## Development Instructions
