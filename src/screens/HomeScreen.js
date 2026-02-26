@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppColors, AppSpacing, AppTypography, CommonStyles } from '../styles/theme';
+import { CloudSun, Lock, ClipboardList, AlertTriangle, CheckCircle, ShoppingCart, Package, Droplet } from 'lucide-react-native';
 
 import { DashboardHeader } from '../components/shared/DashboardHeader';
 import { CardBase } from '../components/ui/CardBase';
@@ -29,108 +30,137 @@ export default function HomeScreen({ navigation }) {
         contentContainerStyle={styles.scrollPadding}
         showsVerticalScrollIndicator={false}
       >
-        {/* Score Ring Card */}
-        <CardBase style={styles.scoreCard}>
-          <View style={styles.scoreRow}>
-            <View style={styles.ringPlaceholder}>
-              <Text style={styles.scoreValue}>87</Text>
-              <Text style={styles.scoreMax}>/100</Text>
+        {/* Card 1: The "Regional Sky" Card (Weather & Season) */}
+        <CardBase style={styles.regionSkyCard}>
+          <View style={styles.cardHeader}>
+            <View style={styles.weatherHero}>
+              <CloudSun size={52} color={AppColors.primary} />
+              <View style={styles.weatherHeroText}>
+                <Text style={styles.tempLarge}>{weather?.temp || '28'}°C</Text>
+                <Text style={styles.weatherDescription}>{t('partlyCloudy')}</Text>
+              </View>
             </View>
-            <View style={styles.scoreInfo}>
-              <Text style={styles.scoreStatus}>{t('excellentHealth')}</Text>
-              <Text style={styles.scoreDesc}>{t('farmPerformance')}</Text>
+            <View style={styles.locationContainer}>
+              <Text style={styles.locationCity}>{weather?.location || 'Banjoun'}, W</Text>
+            </View>
+          </View>
+
+          {/* Season Status Badge */}
+          <View style={styles.seasonBadgeContainer}>
+            <View style={[styles.statusBadge, { backgroundColor: AppColors.successBg, borderColor: AppColors.successBorder }]}>
+              <View style={styles.statusBadgeDot} />
+              <Text style={[styles.statusBadgeText, { color: AppColors.success }]}>
+                PLANTING WINDOW: OPEN <Text style={styles.statusBadgeDays}>(Days left: 14)</Text>
+              </Text>
+            </View>
+          </View>
+
+          {/* 48-Hour Rain Forecast */}
+          <View style={styles.forecastSection}>
+            <Text style={styles.forecastTitle}>Rain Forecast — Next 48hrs</Text>
+            <View style={styles.forecastRow}>
+              <View style={styles.forecastItem}>
+                <View style={[styles.forecastBar, { height: 30 }]} />
+                <Text style={styles.forecastValue}>25%</Text>
+                <Text style={styles.forecastDay}>Today</Text>
+              </View>
+              <View style={styles.forecastItem}>
+                <View style={[styles.forecastBar, { height: 80, backgroundColor: AppColors.primary }]} />
+                <Text style={styles.forecastValue}>80%</Text>
+                <Text style={styles.forecastDay}>Tomorrow</Text>
+              </View>
+              <View style={styles.forecastItem}>
+                <View style={[styles.forecastBar, { height: 45 }]} />
+                <Text style={styles.forecastValue}>45%</Text>
+                <Text style={styles.forecastDay}>Day 3</Text>
+              </View>
+            </View>
+            <View style={styles.alertRow}>
+              <AlertTriangle size={14} color={AppColors.warning} />
+              <Text style={styles.forecastAlert}>Heavy rain expected tomorrow</Text>
+            </View>
+          </View>
+
+          {/* Freemium Upsell */}
+          <View style={styles.upsellContainer}>
+            <View style={styles.upsellOverlay}>
+              <Lock size={20} color={AppColors.txtMuted} style={styles.upsellIcon} />
+              <View style={styles.upsellBlurContent}>
+                <Text style={styles.upsellText}>Your Soil Moisture: <Text style={styles.blurredText}>Unknown</Text></Text>
+                <Text style={styles.upsellSubtext}>Connect an AgroNexus Kit to see live ground data.</Text>
+                <TouchableOpacity>
+                  <Text style={styles.learnMore}>Learn More →</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </CardBase>
 
-        {/* Priority Action Card */}
-        <CardBase accentColor="danger" style={styles.priorityCard}>
-          <View style={styles.priorityHeader}>
-            <View style={styles.priorityLabelBox}>
-              <Text style={styles.priorityLabel}>{t('priorityAction')}</Text>
+        {/* Card 2: The "Smart Action" Card (Advisory & Marketplace) */}
+        <CardBase style={styles.smartActionCard}>
+          <View style={styles.actionHeader}>
+            <View style={styles.actionIconContainer}>
+              <ClipboardList size={24} color={AppColors.primary} />
             </View>
-            <View style={styles.dueBox}>
-              <Text style={styles.dueText}>{t('dueNow')}</Text>
+            <View style={styles.actionHeaderText}>
+              <Text style={styles.actionTitle}>This Week's Recommended Action</Text>
+              <Text style={styles.actionDate}>
+                {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} · Bafoussam  Area
+              </Text>
             </View>
           </View>
-          <Text style={styles.priorityTitle}>{t('irrigateZoneB')}</Text>
-          <Text style={styles.prioritySubtitle}>{t('soilMoistureLow')}</Text>
+
+          {/* Advisory Block */}
+          <View style={styles.advisoryBlock}>
+            <View style={styles.alertHeader}>
+              <AlertTriangle size={16} color={AppColors.warning} />
+              <Text style={styles.alertTitle}>ACTIVE ALERT</Text>
+            </View>
+            <Text style={styles.alertMsg}>
+              Do not spray pesticides today. Heavy rain tomorrow will wash away all chemical treatments.
+            </Text>
+            <Text style={styles.alertResolution}>Wait until Thursday when conditions stabilize.</Text>
+          </View>
+
+          {/* Primary Task */}
+          <View style={styles.taskBlock}>
+            <View style={styles.taskHeader}>
+              <CheckCircle size={16} color={AppColors.success} />
+              <Text style={styles.taskTitle}>PRIMARY TASK</Text>
+            </View>
+            <Text style={styles.taskMsg}>Sow early-cycle Maize. Planting window is open. Optimal soil conditions ahead.</Text>
+          </View>
+
+          {/* Marketplace Button */}
           <StandardButton
-            title={t('waterNow')}
-            variant="danger"
-            size="small"
-            style={styles.actionBtn}
+            title="Buy Certified Maize Seeds"
+            icon={<ShoppingCart size={20} color={AppColors.txtOnPrimary} />}
+            variant="primary"
+            style={styles.marketplaceBtn}
+            textStyle={styles.marketplaceBtnText}
+            onPress={() => navigation.navigate('Marketplace')}
           />
-        </CardBase>
 
-        {/* Field Overview Metrics */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Field Overview</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewMore}>View Details</Text>
-          </TouchableOpacity>
-        </View>
+          {/* Secondary Actions */}
+          <View style={styles.secondaryActions}>
+            <TouchableOpacity style={styles.ghostBtn}>
+              <Package size={16} color={AppColors.txtSecondary} />
+              <Text style={styles.ghostBtnText}>Order Fertilizer</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.ghostBtn}>
+              <Droplet size={16} color={AppColors.txtSecondary} />
+              <Text style={styles.ghostBtnText}>Order Pesticide</Text>
+            </TouchableOpacity>
+          </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.metricsCarousel}
-          contentContainerStyle={styles.carouselPadding}
-        >
-          <CardBase style={styles.metricCard}>
-            <Text style={styles.metricIcon}>💧</Text>
-            <Text style={styles.metricValue}>62%</Text>
-            <Text style={styles.metricLabel}>Moisture</Text>
-          </CardBase>
-          <CardBase style={styles.metricCard}>
-            <Text style={styles.metricIcon}>🌱</Text>
-            <Text style={styles.metricValue}>72%</Text>
-            <Text style={styles.metricLabel}>Nitrogen</Text>
-          </CardBase>
-          <CardBase style={styles.metricCard}>
-            <Text style={styles.metricIcon}>☀️</Text>
-            <Text style={styles.metricValue}>88%</Text>
-            <Text style={styles.metricLabel}>Potassium</Text>
-          </CardBase>
-        </ScrollView>
-
-        {/* Weather Today */}
-        <CardBase style={styles.weatherCard}>
-          {loading ? (
-            <Text style={styles.weatherLoading}>{t('loading')}</Text>
-          ) : (
-            <>
-              <View style={styles.weatherTop}>
-                <View>
-                  <Text style={styles.weatherLabel}>{t('weatherToday')}</Text>
-                  <Text style={styles.weatherCity}>{weather?.location}</Text>
-                </View>
-                <Text style={styles.weatherIcon}>⛅</Text>
-              </View>
-              <View style={styles.weatherMain}>
-                <Text style={styles.weatherTemp}>{weather?.temp}°</Text>
-                <View style={styles.weatherDetails}>
-                  <Text style={styles.weatherDesc}>{t('partlyCloudy')}</Text>
-                  <Text style={styles.weatherExtreme}>{t('high')}: {weather?.high}° · {t('low')}: {weather?.low}°</Text>
-                  <Text style={styles.rainPrediction}>{t('nextRain')}: {weather?.nextRain}</Text>
-                </View>
-              </View>
-              <View style={styles.weatherGrid}>
-                <View style={styles.weatherItem}>
-                  <Text style={styles.weatherItemLabel}>{t('humidity')}</Text>
-                  <Text style={styles.weatherItemValue}>{weather?.humidity}%</Text>
-                </View>
-                <View style={styles.weatherItem}>
-                  <Text style={styles.weatherItemLabel}>{t('rainChance')}</Text>
-                  <Text style={styles.weatherItemValue}>{weather?.rainChance}%</Text>
-                </View>
-                <View style={styles.weatherItem}>
-                  <Text style={styles.weatherItemLabel}>{t('wind')}</Text>
-                  <Text style={styles.weatherItemValue}>{weather?.wind} km/h</Text>
-                </View>
-              </View>
-            </>
-          )}
+          {/* Trust Signal */}
+          <View style={styles.trustSignal}>
+            <Lock size={14} color={AppColors.txtPrimary} style={styles.trustIcon} />
+            <View style={styles.trustSignalTextContainer}>
+              <Text style={styles.trustText}>All purchases via AgroNexus Escrow</Text>
+              <Text style={styles.trustSubtext}>Your money releases only on confirmed delivery.</Text>
+            </View>
+          </View>
         </CardBase>
       </ScrollView>
 
@@ -147,250 +177,336 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollPadding: {
-    paddingHorizontal: 22,
-    paddingTop: 18,
+    paddingHorizontal: 20,
+    paddingTop: 16,
     paddingBottom: 30,
-    gap: 18,
+    gap: 16,
   },
-  scoreCard: {
-    padding: 22,
-    borderRadius: AppSpacing.radiusLg, // r24
-  },
-  scoreRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 20,
-  },
-  ringPlaceholder: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 10,
-    borderColor: AppColors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  scoreValue: {
-    fontSize: 34,
-    fontWeight: '900',
-    color: AppColors.txtPrimary,
-    fontFamily: AppTypography.fontMonoBold,
-  },
-  scoreMax: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: AppColors.txtMuted,
-    fontFamily: AppTypography.fontMonoBold,
-    marginTop: 10,
-  },
-  scoreInfo: {
-    flex: 1,
-  },
-  scoreStatus: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: AppColors.primary,
-    fontFamily: AppTypography.fontPrimaryBlack,
-    marginBottom: 4,
-  },
-  scoreDesc: {
-    fontSize: 13,
-    color: AppColors.txtSecondary,
-    lineHeight: 18,
-    fontFamily: AppTypography.fontPrimary,
-  },
-  priorityCard: {
-    padding: 20,
-    borderRadius: AppSpacing.radiusMd,
-  },
-  priorityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  priorityLabelBox: {
-    backgroundColor: AppColors.dangerBg,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: AppColors.dangerBorder,
-  },
-  priorityLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: AppColors.danger,
-    fontFamily: AppTypography.fontPrimaryExtraBold,
-  },
-  dueBox: {
-    backgroundColor: '#000',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  dueText: {
-    fontSize: 10,
-    fontWeight: '900',
-    color: '#FFF',
-    fontFamily: AppTypography.fontPrimaryBlack,
-  },
-  priorityTitle: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: AppColors.txtPrimary,
-    fontFamily: AppTypography.fontPrimaryBlack,
-  },
-  prioritySubtitle: {
-    fontSize: 14,
-    color: AppColors.txtSecondary,
-    marginTop: 4,
-    marginBottom: 18,
-    fontFamily: AppTypography.fontPrimary,
-  },
-  actionBtn: {
-    marginTop: 5,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginTop: 10,
-    marginBottom: 4,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '900',
-    color: AppColors.txtPrimary,
-    fontFamily: AppTypography.fontPrimaryBlack,
-  },
-  viewMore: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: AppColors.primary,
-    fontFamily: AppTypography.fontPrimaryBold,
-  },
-  metricsCarousel: {
-    marginHorizontal: -22,
-  },
-  carouselPadding: {
-    paddingHorizontal: 22,
-    gap: 14,
-  },
-  metricCard: {
-    width: 140,
-    padding: 16,
-    alignItems: 'center',
-    borderRadius: AppSpacing.radiusMd,
-  },
-  metricIcon: {
-    fontSize: 28,
-    marginBottom: 8,
-  },
-  metricValue: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: AppColors.txtPrimary,
-    fontFamily: AppTypography.fontMonoBold,
-  },
-  metricLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: AppColors.txtMuted,
-    fontFamily: AppTypography.fontPrimaryBold,
-    marginTop: 2,
-  },
-  weatherCard: {
-    padding: 20,
+  regionSkyCard: {
+    padding: 18,
     borderRadius: AppSpacing.radiusLg,
-    marginBottom: 20,
+    backgroundColor: AppColors.primaryWash,
+    borderWidth: 1,
+    borderColor: AppColors.primarySubtle,
   },
-  weatherTop: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 16,
   },
-  weatherLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: AppColors.txtMuted,
-    letterSpacing: 1,
-    fontFamily: AppTypography.fontPrimaryExtraBold,
-  },
-  weatherCity: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: AppColors.txtPrimary,
-    marginTop: 2,
-    fontFamily: AppTypography.fontPrimaryBold,
-  },
-  weatherIcon: {
-    fontSize: 36,
-  },
-  weatherMain: {
+  weatherHero: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 15,
+    gap: 12,
+    flex: 1,
+  },
+  weatherHeroText: {
+    flexShrink: 1,
+  },
+  tempLarge: {
+    fontSize: 32,
+    fontWeight: '900',
+    color: AppColors.primaryDeep,
+    fontFamily: AppTypography.fontMonoBold,
+  },
+  weatherDescription: {
+    fontSize: 13,
+    color: AppColors.primary,
+    fontFamily: AppTypography.fontPrimaryMedium,
+    flexWrap: 'wrap',
+  },
+  locationContainer: {
+    alignItems: 'flex-end',
+    flexShrink: 1,
+    marginLeft: 8,
+  },
+  locationCity: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: AppColors.txtPrimary,
+    fontFamily: AppTypography.fontPrimaryExtraBold,
+    textAlign: 'right',
+  },
+  locationRegion: {
+    fontSize: 11,
+    color: AppColors.txtMuted,
+    fontFamily: AppTypography.fontPrimary,
+    textAlign: 'right',
+  },
+  seasonBadgeContainer: {
     marginBottom: 20,
   },
-  weatherTemp: {
-    fontSize: 54,
-    fontWeight: '900',
+  statusBadge: {
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 100,
+    borderWidth: 1,
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: 6,
+  },
+  statusBadgeDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: AppColors.success,
+  },
+  statusBadgeText: {
+    fontSize: 12,
+    fontWeight: '800',
+    fontFamily: AppTypography.fontPrimaryExtraBold,
+  },
+  statusBadgeDays: {
+    fontWeight: '500',
+    fontFamily: AppTypography.fontPrimaryMedium,
+  },
+  forecastSection: {
+    marginBottom: 20,
+  },
+  forecastTitle: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: AppColors.txtMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 12,
+    fontFamily: AppTypography.fontPrimaryBold,
+  },
+  forecastRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-end',
+    marginBottom: 12,
+    paddingHorizontal: 0,
+  },
+  forecastItem: {
+    alignItems: 'center',
+    gap: 6,
+  },
+  forecastBar: {
+    width: 28,
+    backgroundColor: AppColors.primarySubtle,
+    borderRadius: 4,
+  },
+  forecastValue: {
+    fontSize: 12,
+    fontWeight: '700',
     color: AppColors.txtPrimary,
     fontFamily: AppTypography.fontMonoBold,
   },
-  weatherDetails: {
+  forecastDay: {
+    fontSize: 10,
+    color: AppColors.txtMuted,
+    fontFamily: AppTypography.fontPrimary,
+  },
+  alertRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 2,
+  },
+  forecastAlert: {
+    fontSize: 12,
+    color: AppColors.warning,
+    fontWeight: '700',
+    fontFamily: AppTypography.fontPrimaryBold,
+    flexShrink: 1,
+  },
+  upsellContainer: {
+    borderTopWidth: 1,
+    borderColor: 'rgba(0,0,0,0.06)',
+    paddingTop: 16,
+  },
+  upsellOverlay: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  upsellIcon: {
+    marginTop: 2,
+  },
+  upsellBlurContent: {
     flex: 1,
   },
-  weatherDesc: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: AppColors.txtPrimary,
-    fontFamily: AppTypography.fontPrimaryExtraBold,
-  },
-  weatherExtreme: {
+  upsellText: {
     fontSize: 13,
+    fontWeight: '700',
+    color: AppColors.txtPrimary,
+    fontFamily: AppTypography.fontPrimaryBold,
+    flexWrap: 'wrap',
+  },
+  blurredText: {
+    color: 'rgba(17, 24, 39, 0.3)',
+    textDecorationLine: 'line-through',
+  },
+  upsellSubtext: {
+    fontSize: 12,
     color: AppColors.txtSecondary,
     marginTop: 2,
     fontFamily: AppTypography.fontPrimary,
+    lineHeight: 16,
   },
-  rainPrediction: {
-    fontSize: 12,
+  learnMore: {
+    fontSize: 13,
     color: AppColors.primary,
     fontWeight: '700',
-    marginTop: 4,
+    marginTop: 6,
     fontFamily: AppTypography.fontPrimaryBold,
   },
-  weatherGrid: {
+  smartActionCard: {
+    padding: 18,
+    borderRadius: AppSpacing.radiusLg,
+  },
+  actionHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 16,
+  },
+  actionIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: AppColors.primaryWash,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionHeaderText: {
+    flex: 1,
+  },
+  actionTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: AppColors.txtPrimary,
+    fontFamily: AppTypography.fontPrimaryExtraBold,
+    flexWrap: 'wrap',
+  },
+  actionDate: {
+    fontSize: 12,
+    color: AppColors.txtMuted,
+    marginTop: 1,
+    fontFamily: AppTypography.fontPrimary,
+  },
+  advisoryBlock: {
+    backgroundColor: AppColors.warningBg,
+    borderLeftWidth: 4,
+    borderLeftColor: AppColors.warning,
+    padding: 12,
+    borderRadius: AppSpacing.radiusSm,
+    marginBottom: 12,
+  },
+  alertHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 6,
+  },
+  alertTitle: {
+    fontSize: 11,
+    fontWeight: '900',
+    color: AppColors.warning,
+    letterSpacing: 1,
+    fontFamily: AppTypography.fontPrimaryBlack,
+  },
+  alertMsg: {
+    fontSize: 13,
+    color: AppColors.txtPrimary,
+    lineHeight: 18,
+    fontFamily: AppTypography.fontPrimaryMedium,
+  },
+  alertResolution: {
+    fontSize: 12,
+    color: AppColors.txtSecondary,
+    marginTop: 6,
+    fontStyle: 'italic',
+    fontFamily: AppTypography.fontPrimary,
+  },
+  taskBlock: {
+    backgroundColor: AppColors.successBg,
+    borderLeftWidth: 4,
+    borderLeftColor: AppColors.success,
+    padding: 12,
+    borderRadius: AppSpacing.radiusSm,
+    marginBottom: 20,
+  },
+  taskHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 6,
+  },
+  taskTitle: {
+    fontSize: 11,
+    fontWeight: '900',
+    color: AppColors.success,
+    letterSpacing: 1,
+    fontFamily: AppTypography.fontPrimaryBlack,
+  },
+  taskMsg: {
+    fontSize: 13,
+    color: AppColors.txtPrimary,
+    lineHeight: 18,
+    fontFamily: AppTypography.fontPrimaryMedium,
+  },
+  marketplaceBtn: {
+    marginBottom: 16,
+    minHeight: 48,
+  },
+  marketplaceBtnText: {
+    fontSize: 14,
+  },
+  secondaryActions: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 20,
+  },
+  ghostBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: AppColors.borderStrong,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: AppColors.surface,
+    flexDirection: 'row',
+    gap: 6,
+  },
+  ghostBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: AppColors.txtSecondary,
+    fontFamily: AppTypography.fontPrimaryBold,
+    flexShrink: 1,
+  },
+  trustSignal: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    paddingTop: 16,
     borderTopWidth: 1,
     borderColor: AppColors.border,
-    paddingTop: 16,
-    justifyContent: 'space-between',
   },
-  weatherItem: {
-    alignItems: 'center',
-  },
-  weatherItemLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: AppColors.txtMuted,
-    fontFamily: AppTypography.fontPrimaryBold,
-    textTransform: 'uppercase',
-  },
-  weatherItemValue: {
-    fontSize: 14,
-    fontWeight: '900',
-    color: AppColors.txtPrimary,
+  trustIcon: {
     marginTop: 2,
-    fontFamily: AppTypography.fontMonoBold,
   },
-  weatherLoading: {
-    textAlign: 'center',
-    padding: 20,
+  trustSignalTextContainer: {
+    flex: 1,
+  },
+  trustText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: AppColors.txtPrimary,
+    fontFamily: AppTypography.fontPrimaryBold,
+    marginBottom: 1,
+  },
+  trustSubtext: {
+    fontSize: 11,
     color: AppColors.txtMuted,
     fontFamily: AppTypography.fontPrimary,
+    lineHeight: 16,
   },
 });

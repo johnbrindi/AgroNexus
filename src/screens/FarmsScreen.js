@@ -42,36 +42,15 @@ export default function FarmsScreen({ navigation }) {
                             <View style={styles.farmInfoContainer}>
                                 <Text style={styles.farmName}>Green Valley Farm</Text>
                                 <View style={styles.locationRow}>
-                                    <MapPin size={14} color={AppColors.background} />
+                                    <MapPin size={14} color={AppColors.surface} />
                                     <Text style={styles.locationText}>North Sector, Block A</Text>
                                 </View>
                             </View>
                         </View>
                     </ImageBackground>
 
-                    <View style={styles.farmDetails}>
-                        <View style={styles.metricItem}>
-                            <Droplets size={20} color={AppColors.primary} />
-                            <Text style={styles.metricValue}>Adequate</Text>
-                            <Text style={styles.metricLabel}>Moisture</Text>
-                        </View>
-                        <View style={styles.metricDivider} />
-                        <View style={styles.metricItem}>
-                            <Thermometer size={20} color={AppColors.warning} />
-                            <Text style={styles.metricValue}>24°C</Text>
-                            <Text style={styles.metricLabel}>Soil Temp</Text>
-                        </View>
-                        <View style={styles.metricDivider} />
-                        <View style={styles.metricItem}>
-                            <Sprout size={20} color={AppColors.success} />
-                            <Text style={styles.metricValue}>Corn</Text>
-                            <Text style={styles.metricLabel}>Crop Type</Text>
-                        </View>
-                    </View>
-
                     <View style={styles.actionRow}>
                         <StandardButton title="VIEW DETAILS" variant="secondary" size="small" style={styles.btnFlex} />
-                        <StandardButton title="LOG ACTIVITY" variant="primary" size="small" style={styles.btnFlex} />
                     </View>
                 </CardBase>
 
@@ -95,36 +74,15 @@ export default function FarmsScreen({ navigation }) {
                             <View style={styles.farmInfoContainer}>
                                 <Text style={styles.farmName}>Sunset Wheat Fields</Text>
                                 <View style={styles.locationRow}>
-                                    <MapPin size={14} color={AppColors.background} />
+                                    <MapPin size={14} color={AppColors.surface} />
                                     <Text style={styles.locationText}>South Sector, Block D</Text>
                                 </View>
                             </View>
                         </View>
                     </ImageBackground>
 
-                    <View style={styles.farmDetails}>
-                        <View style={styles.metricItem}>
-                            <Droplets size={20} color={AppColors.warning} />
-                            <Text style={[styles.metricValue, { color: AppColors.warning }]}>Low</Text>
-                            <Text style={styles.metricLabel}>Moisture</Text>
-                        </View>
-                        <View style={styles.metricDivider} />
-                        <View style={styles.metricItem}>
-                            <Thermometer size={20} color={AppColors.primary} />
-                            <Text style={styles.metricValue}>28°C</Text>
-                            <Text style={styles.metricLabel}>Soil Temp</Text>
-                        </View>
-                        <View style={styles.metricDivider} />
-                        <View style={styles.metricItem}>
-                            <Sprout size={20} color={AppColors.success} />
-                            <Text style={styles.metricValue}>Wheat</Text>
-                            <Text style={styles.metricLabel}>Crop Type</Text>
-                        </View>
-                    </View>
-
                     <View style={styles.actionRow}>
                         <StandardButton title="VIEW DETAILS" variant="secondary" size="small" style={styles.btnFlex} />
-                        <StandardButton title="START IRRIGATION" variant="primary" size="small" style={styles.btnFlex} />
                     </View>
                 </CardBase>
             </ScrollView>
@@ -180,7 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
     },
     statusBadgeText: {
-        color: AppColors.background,
+        color: AppColors.surface,
         fontSize: 10,
         fontFamily: AppTypography.fontPrimaryBold,
         textTransform: 'uppercase',
@@ -195,7 +153,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(255, 255, 255, 0.4)',
     },
     sizeBadgeText: {
-        color: AppColors.background,
+        color: AppColors.surface,
         fontSize: 11,
         fontFamily: AppTypography.fontPrimaryBold,
     },
@@ -203,7 +161,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     farmName: {
-        color: AppColors.background,
+        color: AppColors.surface,
         fontSize: 22,
         fontFamily: AppTypography.fontPrimaryBlack,
         marginBottom: 4,
@@ -214,45 +172,18 @@ const styles = StyleSheet.create({
         gap: 4,
     },
     locationText: {
-        color: AppColors.background,
+        color: AppColors.surface,
         fontSize: 13,
         fontFamily: AppTypography.fontPrimaryMedium,
         opacity: 0.9,
-    },
-    farmDetails: {
-        flexDirection: 'row',
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-        borderBottomWidth: 1,
-        borderColor: AppColors.border,
-        backgroundColor: AppColors.card,
-    },
-    metricItem: {
-        flex: 1,
-        alignItems: 'center',
-        gap: 4,
-    },
-    metricDivider: {
-        width: 1,
-        backgroundColor: AppColors.border,
-        marginVertical: 4,
-    },
-    metricValue: {
-        fontSize: 15,
-        fontFamily: AppTypography.fontPrimaryBold,
-        color: AppColors.txtPrimary,
-        marginTop: 4,
-    },
-    metricLabel: {
-        fontSize: 11,
-        fontFamily: AppTypography.fontPrimaryMedium,
-        color: AppColors.txtMuted,
     },
     actionRow: {
         flexDirection: 'row',
         padding: 16,
         gap: 12,
         backgroundColor: AppColors.card,
+        borderTopWidth: 1,
+        borderColor: AppColors.border,
         borderBottomLeftRadius: AppSpacing.radiusLg,
         borderBottomRightRadius: AppSpacing.radiusLg,
     },

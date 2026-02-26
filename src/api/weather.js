@@ -12,7 +12,7 @@ export const fetchWeatherData = async (location) => {
                 rainChance: 12,
                 wind: 9,
                 nextRain: "Tonight (approx. 22:30)",
-                location: location || "Bafoussam, Cameroon",
+                location: location || "Bafoussam",
             });
         }, 1000);
     });
